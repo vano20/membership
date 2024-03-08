@@ -1,21 +1,31 @@
 import Input from './components/Input'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Select from "react-tailwindcss-select";
+import { useFetchCitiesQuery, useFetchProvincesQuery } from './store';
 
 function App() {
   const [prov, setProv] = useState(null)
-  const options = [
-    { value: "fox", label: "🦊 Fox" },
-    { value: "Butterfly", label: "🦋 Butterfly" },
-    { value: "Honeybee", label: "🐝 Honeybee" }
-  ]
-  const handleChange = value => {
-    console.log(value)
+  const [city, setCity] = useState(null)
+  const [optsCity, setOptsCity] = useState([])
+  const { data: provinces, isFetching } = useFetchProvincesQuery()
+  const { data: cities, isFetching: isFetchingCities } = useFetchCitiesQuery(prov, {
+    skip: !prov
+  })
+
+  useEffect(() => {
+    if (prov) setOptsCity(cities)
+    else setOptsCity([])
+  }, [cities, prov])
+
+  const handleSelectProv = value => {
     setProv(value)
+  }
+  const handleChange = value => {
+    setCity(value)
   }
   return (
     <>
-      <div className="flex w-screen min-h-screen justify-center items-center bg-gradient-to-r from-rose-400 to-red-500">
+      <div className="flex w-screen min-h-screen overflow-auto justify-center items-center bg-gradient-to-r from-rose-400 to-red-500">
         <div className="flex flex-col w-1/3 h-full bg-neutral-200 border-2 rounded-md border-slate-100 p-10">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl text-slate-700 font-semibold">
@@ -45,15 +55,21 @@ function App() {
                 <Select
                     placeholder="Select provinsi"
                     value={prov}
-                    onChange={handleChange}
-                    options={options}
+                    onChange={handleSelectProv}
+                    options={provinces || []}
+                    loading={isFetching}
+                    isClearable
+                    isSearchable
                 />
               </div>
               <div className="w-full">
                 <Select
-                    value={prov}
+                    value={city}
                     onChange={handleChange}
-                    options={options}
+                    options={optsCity}
+                    loading={isFetchingCities}
+                    isClearable
+                    isSearchable
                 />
               </div>
             </div>

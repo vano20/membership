@@ -19,6 +19,7 @@ function App() {
 
   const handleSelectProv = value => {
     setProv(value)
+    if (!value) setCity(null)
   }
   const handleChange = value => {
     setCity(value)
@@ -26,9 +27,9 @@ function App() {
   return (
     <>
       <div className="flex w-screen min-h-screen overflow-auto justify-center items-center bg-gradient-to-r from-rose-400 to-red-500">
-        <div className="flex flex-col w-1/3 h-full bg-neutral-200 border-2 rounded-md border-slate-100 p-10">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl text-slate-700 font-semibold">
+        <div className="flex flex-col md:w-1/3 w-full h-full bg-neutral-200 border-2 rounded-md border-slate-100 p-10">
+          <div className="flex md:justify-between justify-center items-center mb-8">
+            <h2 className="text-2xl text-slate-700 font-semibold hidden md:block">
               Registrasi
             </h2>
             <img src="https://gakindo.org/wp-content/uploads/2021/07/Gabungan-Kontraktor-Indonesia.jpg" width="200px" className="rounded-md" />
@@ -53,11 +54,12 @@ function App() {
             <div className="flex justify-between items-center gap-4">
               <div className="w-full">
                 <Select
-                    placeholder="Select provinsi"
                     value={prov}
                     onChange={handleSelectProv}
                     options={provinces || []}
                     loading={isFetching}
+                    placeholder="Pilih provinsi"
+                    noOptionsMessage="Data tidak ditemukan"
                     isClearable
                     isSearchable
                 />
@@ -68,6 +70,8 @@ function App() {
                     onChange={handleChange}
                     options={optsCity}
                     loading={isFetchingCities}
+                    placeholder="Pilih kota/kabupaten"
+                    noOptionsMessage="Data tidak ditemukan"
                     isClearable
                     isSearchable
                 />

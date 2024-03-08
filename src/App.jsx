@@ -51,15 +51,16 @@ function App() {
               <Input label="NPWP" name="npwp" placeholder="NPWP perusahaan" />
             </div>
             <label className="block font-semibold"> Alamat </label>
-            <div className="flex justify-between items-center gap-4">
+            <div className="flex md:justify-between md:flex-row flex-col justify-start items-center gap-4">
               <div className="w-full">
                 <Select
                     value={prov}
                     onChange={handleSelectProv}
                     options={provinces || []}
-                    loading={isFetching}
                     placeholder="Pilih provinsi"
                     noOptionsMessage="Data tidak ditemukan"
+                    loading={isFetching}
+                    isDisabled={isFetching}
                     isClearable
                     isSearchable
                 />
@@ -69,9 +70,10 @@ function App() {
                     value={city}
                     onChange={handleChange}
                     options={optsCity}
-                    loading={isFetchingCities}
                     placeholder="Pilih kota/kabupaten"
                     noOptionsMessage="Data tidak ditemukan"
+                    loading={isFetchingCities}
+                    isDisabled={isFetchingCities}
                     isClearable
                     isSearchable
                 />

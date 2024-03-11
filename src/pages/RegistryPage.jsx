@@ -7,6 +7,7 @@ import Table from '../components/Table'
 import { Badge } from '../components/Badge'
 import { useFetchRegistrationQuery } from '../store/api/registrationApi'
 import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
 
 const ENTER_CODE = 13
 
@@ -94,9 +95,18 @@ export default function RegistryPage() {
   return (
     <div className="w-screen min-h-screen overflow-auto w-full bg-gradient-to-r from-teal-400 to-cyan-500">
       <div className="h-screen w-1/2 mx-auto bg-neutral-200 p-8 rounded-md border-slate-500 shadow-md shadow-cyan-500">
-        <h2 className="text-2xl font-semibold capitalize mb-4 text-gray-700">
-          Cek proses pendaftaran
-        </h2>
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-semibold capitalize mb-4 text-gray-700">
+            Cek proses pendaftaran
+          </h2>
+          <Link
+            as="a"
+            to="/"
+            className="text-md ml-1 text-blue-600 hover:text-blue-500/30"
+          >
+            Kembali
+          </Link>
+        </div>
         <div className="flex justify-between gap-2 mb-6">
           <input
             className="focus:outline-none focus:ring-0 focus:border-blue-200/75 focus:shadow-md focus:shadow-blue-500/30 border border-slate-100 rounded-md py-1 px-2 w-full h-12"

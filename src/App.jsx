@@ -1,7 +1,7 @@
 import {
   Navigate,
   RouterProvider,
-  createBrowserRouter
+  createHashRouter
 } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import MembershipPage from './pages/MembershipPage'
@@ -28,7 +28,7 @@ const AdminRoutes = ({ children }) => {
   return children
 }
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: (

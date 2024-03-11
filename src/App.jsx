@@ -77,7 +77,7 @@ function App() {
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
     </>
   )
 }

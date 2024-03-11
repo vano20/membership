@@ -28,6 +28,10 @@ export default function RegistryPage() {
       label: 'Kontak'
     },
     {
+      key: 'period',
+      label: 'Periode'
+    },
+    {
       key: 'status',
       label: 'Status'
     },

@@ -9,12 +9,12 @@ function AuthProvider({ children }) {
     false
   )
 
-  const handleIsLogin = () => {
-    setLogin(true)
+  const handleIsLogin = token => {
+    setLogin(token)
   }
 
   const logout = () => {
-    setLogin(false)
+    setLogin(null)
   }
 
   const context = {

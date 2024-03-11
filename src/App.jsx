@@ -44,7 +44,7 @@ const router = createHashRouter([
         element: <MembershipPage />
       },
       {
-        path: '/login',
+        path: '/rahasia',
         element: <LoginPage />
       },
       {

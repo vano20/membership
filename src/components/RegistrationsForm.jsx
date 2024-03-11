@@ -31,12 +31,23 @@ const RegistrationsForm = () => {
   })
   const [
     addRegistration,
-    { isError, isLoading, isSuccess, error }
+    {
+      isError,
+      isLoading,
+      isSuccess,
+      error,
+      status,
+      ...allObj
+    }
   ] = useAddRegistrationsMutation()
 
   const [isPageLoading] = useMemo(() => {
-    return [isLoading || isFetching]
-  }, [isFetching])
+    return [
+      isLoading ||
+        isFetching ||
+        status === 'pending'
+    ]
+  }, [isLoading, isFetching, status])
 
   useEffect(() => {
     if (isError) {

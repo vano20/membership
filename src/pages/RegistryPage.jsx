@@ -4,7 +4,6 @@ import {
   useState
 } from 'react'
 import Table from '/src/components/Table'
-import { Badge } from '/src/components/Badge'
 import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'

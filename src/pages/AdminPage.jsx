@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import LogoutButton from '/src/components/LogoutButton'
 import StatusBadge from '/src/components/StatusBadge'
 import Table from '/src/components/Table'
@@ -6,22 +7,29 @@ import { useFetchListRegistrationQuery } from '/src/store/api/registrationApi'
 
 const INITIAL_META = {
   page: 1,
-  last_page: 1,
   per_page: 10,
+  token: null
+}
+const INITIAL_META_DATA = {
   total: 1,
   from: 1,
-  to: 1
+  to: 1,
+  last_page: 1
 }
 
 export default function AdminPage() {
   const { isLoggedIn } = useAuth()
+  const [metaData, setMetaData] = useState({
+    ...INITIAL_META_DATA
+  })
+  const [meta, setMeta] = useState({
+    ...INITIAL_META,
+    token: isLoggedIn
+  })
   const {
-    data: {
-      data,
-      meta = { ...INITIAL_META }
-    } = {},
+    data: { data, meta: respMeta } = {},
     isFetching
-  } = useFetchListRegistrationQuery(isLoggedIn)
+  } = useFetchListRegistrationQuery(meta)
   const headers = [
     {
       key: 'company_name',
@@ -49,9 +57,26 @@ export default function AdminPage() {
     }
   ]
 
+  useEffect(() => {
+    setMetaData({
+      ...metaData,
+      last_page:
+        respMeta?.last_page || meta.last_page,
+      total: respMeta?.total || meta.total,
+      from: respMeta?.from || meta.from,
+      to: respMeta?.to || meta.to
+    })
+  }, [respMeta])
+
   const handleApproval = item => {
     console.log(data)
     alert(JSON.stringify(item))
+  }
+  const handleUpdateMeta = ({ page }) => {
+    setMeta({
+      ...meta,
+      page
+    })
   }
 
   return (
@@ -66,6 +91,7 @@ export default function AdminPage() {
         <section>
           <Table
             meta={meta}
+            metaData={metaData}
             isLoading={isFetching}
             headers={headers}
             data={data || []}
@@ -91,6 +117,7 @@ export default function AdminPage() {
                 </>
               )
             }
+            onChangePage={handleUpdateMeta}
           />
         </section>
       </div>

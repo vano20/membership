@@ -6,32 +6,33 @@ import {
 
 const Table = ({
   headers,
+  metaData = {
+    total: 1,
+    from: 1,
+    to: 1
+  },
+  meta = {
+    page: 1,
+    last_page: 1,
+    per_page: 10
+  },
   data: tableData = [],
   emptyMessage,
   isSelectable = false,
   isLoading = false,
+  noFooter = false,
   children,
   ...props
 }) => {
-  const [meta, setMeta] = useState(
-    props.meta || {
-      page: 1,
-      last_page: 1,
-      per_page: 10,
-      total: 1,
-      from: 1,
-      to: 1
-    }
-  )
   const [isLastPage] = useMemo(() => {
     const isLastPage =
-      meta?.page === meta?.last_page
+      meta.page === metaData.last_page
     return [isLastPage]
   }, [meta])
   const handlePage = page => {
-    if (meta.last_page === meta.last_page) return
+    if (metaData.last_page < page) return
     const newPage = page < 1 ? 1 : +page
-    setMeta({
+    props.onChangePage({
       ...meta,
       page: newPage
     })
@@ -208,47 +209,50 @@ const Table = ({
                 {tableBody}
               </tbody>
             </table>
-            <div className="flex justify-between items-center p-4">
-              <div className="text-slate-500">
-                Showing {meta.from} - {meta.to} of{' '}
-                {meta.total}
-              </div>
-              <div className="text-slate-500 flex gap-2">
-                <div
-                  className={`flex items-center min-h-full ${
-                    meta.page === 1
-                      ? 'cursor-not-allowed'
-                      : 'cursor-pointer'
-                  }`}
-                  onClick={() =>
-                    handlePage(meta.page - 1)
-                  }
-                >
-                  <MdChevronLeft size="24" />
+            {!noFooter && (
+              <div className="flex justify-between items-center text-sm p-4">
+                <div className="text-slate-500">
+                  Showing {metaData.from} -{' '}
+                  {metaData.to} of{' '}
+                  {metaData.total}
                 </div>
-                <div>
-                  <input
-                    value={meta.page}
-                    className="focus:outline-none focus:ring-0 focus:border-slate-900/75 focus:shadow-md border border-slate-100 rounded-md py-1 px-2 w-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none flex items-center"
-                    onChange={e =>
-                      handlePage(e.target.value)
+                <div className="text-slate-500 flex gap-2">
+                  <div
+                    className={`flex items-center min-h-full ${
+                      meta.page === 1
+                        ? 'cursor-not-allowed'
+                        : 'cursor-pointer'
+                    }`}
+                    onClick={() =>
+                      handlePage(meta.page - 1)
                     }
-                  />
-                </div>
-                <div
-                  className={`flex items-center min-h-full ${
-                    isLastPage
-                      ? 'cursor-not-allowed'
-                      : 'cursor-pointer'
-                  }`}
-                  onClick={() =>
-                    handlePage(meta.page + 1)
-                  }
-                >
-                  <MdChevronRight size="24" />
+                  >
+                    <MdChevronLeft size="24" />
+                  </div>
+                  <div>
+                    <input
+                      value={meta.page}
+                      className="focus:outline-none focus:ring-0 focus:border-slate-900/75 focus:shadow-md border border-slate-100 rounded-md py-1 px-2 w-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none flex items-center"
+                      onChange={e =>
+                        handlePage(e.target.value)
+                      }
+                    />
+                  </div>
+                  <div
+                    className={`flex items-center min-h-full ${
+                      isLastPage
+                        ? 'cursor-not-allowed'
+                        : 'cursor-pointer'
+                    }`}
+                    onClick={() =>
+                      handlePage(meta.page + 1)
+                    }
+                  >
+                    <MdChevronRight size="24" />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

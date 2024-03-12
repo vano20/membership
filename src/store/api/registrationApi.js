@@ -40,7 +40,12 @@ const registrationApi = createApi({
         //   response.data,
         transformErrorResponse: response =>
           response.data?.errors,
-        query: token => ({
+        query: ({
+          token,
+          page = 1,
+          size = 10
+        }) => ({
+          url: `?page=${page}&size=${size}`,
           headers: {
             Authorization: token
           }

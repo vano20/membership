@@ -33,6 +33,18 @@ const registrationApi = createApi({
         query: npwp => ({
           url: `/${npwp}`
         })
+      }),
+      fetchListRegistration: builder.query({
+        providesTags: () => ['Registrations'],
+        // transformResponse: response =>
+        //   response.data,
+        transformErrorResponse: response =>
+          response.data?.errors,
+        query: token => ({
+          headers: {
+            Authorization: token
+          }
+        })
       })
     }
   }
@@ -40,6 +52,7 @@ const registrationApi = createApi({
 
 export const {
   useAddRegistrationsMutation,
-  useFetchRegistrationQuery
+  useFetchRegistrationQuery,
+  useFetchListRegistrationQuery
 } = registrationApi
 export { registrationApi }

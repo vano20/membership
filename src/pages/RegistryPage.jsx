@@ -8,6 +8,7 @@ import { Badge } from '../components/Badge'
 import { useFetchRegistrationQuery } from '../store/api/registrationApi'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
+import StatusBadge from '../components/StatusBadge'
 
 const ENTER_CODE = 13
 
@@ -78,24 +79,6 @@ export default function RegistryPage() {
       return [isSearchedAndEmptyMessage]
     }, [data, npwp])
 
-  const mappingStatus = {
-    pending: 0,
-    approved: 1,
-    rejected: 2
-  }
-
-  const mappingStatusText = {
-    [mappingStatus.pending]: 'Pending',
-    [mappingStatus.approved]: 'Approved',
-    [mappingStatus.rejected]: 'Rejected'
-  }
-
-  const mappingStatusColor = {
-    [mappingStatus.pending]: 'yellow',
-    [mappingStatus.approved]: 'green',
-    [mappingStatus.rejected]: 'red'
-  }
-
   return (
     <div className="w-screen md:min-h-screen overflow-auto w-full bg-gradient-to-r from-teal-400 to-cyan-500">
       <div className="h-screen w-full md:w-1/2 mx-auto bg-neutral-200 p-8 rounded-md border-slate-500 shadow-md shadow-cyan-500">
@@ -156,19 +139,9 @@ export default function RegistryPage() {
             body_status={item =>
               item && (
                 <>
-                  <Badge
-                    variant={
-                      mappingStatusColor[
-                        item.status
-                      ]
-                    }
-                  >
-                    {
-                      mappingStatusText[
-                        item.status
-                      ]
-                    }
-                  </Badge>
+                  <StatusBadge
+                    status={item.status}
+                  />
                 </>
               )
             }

@@ -3,12 +3,12 @@ import {
   useMemo,
   useState
 } from 'react'
-import Table from '../components/Table'
-import { Badge } from '../components/Badge'
-import { useFetchRegistrationQuery } from '../store/api/registrationApi'
+import Table from '/src/components/Table'
+import { Badge } from '/src/components/Badge'
+import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
-import StatusBadge from '../components/StatusBadge'
+import StatusBadge from '/src/components/StatusBadge'
 
 const ENTER_CODE = 13
 
@@ -145,6 +145,7 @@ export default function RegistryPage() {
                 </>
               )
             }
+            noFooter
           ></Table>
         </div>
       </div>

@@ -9,7 +9,7 @@ import {
   useAddRegistrationsMutation,
   useFetchCitiesQuery,
   useFetchProvincesQuery
-} from '../store'
+} from '/src/store'
 import {
   ErrorMessage,
   Field,

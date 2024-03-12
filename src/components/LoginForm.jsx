@@ -1,9 +1,9 @@
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import Input from './Input'
-import { useLoginMutation } from '../store'
+import Input from '/src/components/Input'
+import { useLoginMutation } from '/src/store'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/useAuth'
+import { useAuth } from '/src/context//useAuth'
 import toast from 'react-hot-toast'
 
 export default function LoginForm() {

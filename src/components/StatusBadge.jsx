@@ -1,7 +1,7 @@
 import {
   mappingStatusColor,
   mappingStatusText
-} from '../pages/constant'
+} from '/src/pages/constant'
 import { Badge } from './Badge'
 
 export default function StatusBadge({ status }) {

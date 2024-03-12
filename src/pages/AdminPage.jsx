@@ -1,9 +1,8 @@
-import { Badge } from '../components/Badge'
-import LogoutButton from '../components/LogoutButton'
-import StatusBadge from '../components/StatusBadge'
-import Table from '../components/Table'
-import { useAuth } from '../context/useAuth'
-import { useFetchListRegistrationQuery } from '../store/api/registrationApi'
+import LogoutButton from '/src/components/LogoutButton'
+import StatusBadge from '/src/components/StatusBadge'
+import Table from '/src/components/Table'
+import { useAuth } from '/src/context/useAuth'
+import { useFetchListRegistrationQuery } from '/src/store/api/registrationApi'
 
 const INITIAL_META = {
   page: 1,

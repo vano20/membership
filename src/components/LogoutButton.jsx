@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/useAuth'
-import { useLogoutMutation } from '../store'
+import { useAuth } from '/src/context//useAuth'
+import { useLogoutMutation } from '/src/store'
 
 export default function LogoutButton() {
   const [logoutApi, { isLoading }] =

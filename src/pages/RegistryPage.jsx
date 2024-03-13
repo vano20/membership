@@ -33,11 +33,29 @@ export default function RegistryPage() {
     },
     {
       key: 'status',
-      label: 'Status'
+      label: 'Status',
+      render: item => (
+        <>
+          <StatusBadge status={item.status} />
+        </>
+      )
     },
     {
       key: 'actions',
-      label: ''
+      label: '',
+      render: item => (
+        <>
+          <a
+            href={`${
+              import.meta.env.VITE_API_BASE_URL
+            }/download-pdf/${item.npwp}`}
+            target="_blank"
+            className="text-blue-600 hover:text-blue-300 cursor-pointer"
+          >
+            Download
+          </a>
+        </>
+      )
     }
   ]
   const { data, isFetching, isError, error } =
@@ -119,31 +137,6 @@ export default function RegistryPage() {
             }
             headers={headers}
             data={data ? [data] : []}
-            actions={item =>
-              item && (
-                <>
-                  <a
-                    href={`${
-                      import.meta.env
-                        .VITE_API_BASE_URL
-                    }/download-pdf/${item.npwp}`}
-                    target="_blank"
-                    className="text-blue-600 hover:text-blue-300 cursor-pointer"
-                  >
-                    Download
-                  </a>
-                </>
-              )
-            }
-            body_status={item =>
-              item && (
-                <>
-                  <StatusBadge
-                    status={item.status}
-                  />
-                </>
-              )
-            }
             noFooter
           ></Table>
         </div>

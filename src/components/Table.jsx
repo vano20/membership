@@ -39,140 +39,94 @@ const Table = ({
   }
 
   const checkboxLength = isSelectable ? 1 : 0
-  let tableHeaders
-  if (headers) {
-    tableHeaders = headers.map(
-      ({ key, label }, index) => {
-        if (key !== 'actions') {
-          return (
-            <th
-              key={`header-${key}-${index}`}
-              scope="col"
-              className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"
-            >
-              {label}
-            </th>
-          )
-        } else {
-          return (
-            <th
-              key={`header-${key}-${index}`}
-              scope="col"
-              className="p-4"
-            >
-              <span className="sr-only">
-                Actions
-              </span>
-            </th>
-          )
-        }
-      }
-    )
-  }
 
-  let tableBody
-  if (tableData?.length) {
-    tableBody = tableData.map(
-      (item, indexItem) => {
-        let tds
-        if (headers) {
-          tds = headers.map(({ key }) => {
-            if (key !== 'actions') {
-              return (
-                <td
-                  key={`data-${key}-${indexItem}`}
-                  className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
-                >
-                  {props?.[`body_${key}`]?.(
-                    item
-                  ) || item?.[key]}
-                </td>
-              )
-            } else {
-              return (
-                <td
-                  key={`data-${key}-${indexItem}`}
-                  className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap"
-                >
-                  {props?.actions?.(item) || (
-                    <>
-                      <div>Default</div>
-                    </>
-                  )}
-                </td>
-              )
-            }
-          })
-        }
+  const renderedCheckbox = id => (
+    <td className="p-4 w-4">
+      <div className="flex items-center">
+        <input
+          id={`checkbox-table-${id}`}
+          type="checkbox"
+          className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+        />
+        <label
+          htmlFor={`checkbox-${id}`}
+          className="sr-only"
+        >
+          checkbox
+        </label>
+      </div>
+    </td>
+  )
+
+  const renderedHeader = headers.map(
+    ({ label, key }, index) => {
+      if (key === 'actions') {
         return (
-          <tr
-            key={`data-row-${indexItem}`}
-            className="hover:bg-gray-100"
+          <th
+            key={`header-${key}-${index}`}
+            scope="col"
+            className="p-4"
           >
-            {isSelectable && (
-              <td
-                key={`data-checkbox-${indexItem}`}
-                className="p-4 w-4"
-              >
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2"
-                  />
-                  <label
-                    htmlFor="checkbox-table-1"
-                    className="sr-only"
-                  >
-                    checkbox
-                  </label>
-                </div>
-              </td>
-            )}
-            {tds}
-          </tr>
+            <span className="sr-only">
+              Actions
+            </span>
+          </th>
         )
       }
-    )
-  } else if (!isLoading) {
-    tableBody = (
-      <tr
-        key={`data-row-empty`}
-        className="hover:bg-gray-100"
-      >
-        <td
-          key={`data-checkbox-empty`}
-          className="p-4 w-4"
-          colSpan={
-            headers.length + checkboxLength
-          }
+      return (
+        <th
+          key={`header-${key}-${index}`}
+          scope="col"
+          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"
         >
-          <div className="flex justify-center items-center text-slate-500">
-            {emptyMessage || 'No Data'}
-          </div>
-        </td>
-      </tr>
-    )
-  } else if (isLoading) {
-    tableBody = (
-      <tr
-        key={`data-row-empty`}
-        className="hover:bg-gray-100"
-      >
-        <td
-          key={`data-checkbox-empty`}
-          className="p-4 w-4"
-          colSpan={
-            headers.length + checkboxLength
-          }
+          {label}
+        </th>
+      )
+    }
+  )
+
+  const renderedBody = tableData.map(
+    (row, rowIndex) => {
+      const renderedCell = headers.map(col => {
+        return (
+          <td
+            key={`data-${col.key}-${rowIndex}`}
+            className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
+          >
+            {col?.render?.(row) || row?.[col.key]}
+          </td>
+        )
+      })
+      return (
+        <tr
+          key={`data-row-${rowIndex}`}
+          className="hover:bg-gray-100"
         >
-          <div className="flex justify-center items-center text-slate-500">
-            Loading..
-          </div>
-        </td>
-      </tr>
-    )
-  }
+          {isSelectable &&
+            renderedCheckbox(`row-${rowIndex}`)}
+          {renderedCell}
+        </tr>
+      )
+    }
+  )
+  const renderedEmpty = (
+    <tr
+      key={`data-row-empty`}
+      className="hover:bg-gray-100"
+    >
+      <td
+        key={`data-checkbox-empty`}
+        className="p-4 w-4"
+        colSpan={headers.length + checkboxLength}
+      >
+        <div className="flex justify-center items-center text-slate-500">
+          {isLoading
+            ? 'Loading..'
+            : emptyMessage || 'No Data'}
+        </div>
+      </td>
+    </tr>
+  )
 
   return (
     <>
@@ -182,31 +136,15 @@ const Table = ({
             <table className="min-w-full divide-y divide-gray-200 table-fixed">
               <thead className="bg-gray-100">
                 <tr>
-                  {isSelectable && (
-                    <th
-                      scope="col"
-                      className="p-4"
-                    >
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-all"
-                          type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2"
-                        />
-                        <label
-                          htmlFor="checkbox-all"
-                          className="sr-only"
-                        >
-                          checkbox
-                        </label>
-                      </div>
-                    </th>
-                  )}
-                  {tableHeaders}
+                  {isSelectable &&
+                    renderedCheckbox('all')}
+                  {renderedHeader}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {tableBody}
+                {tableData.length
+                  ? renderedBody
+                  : renderedEmpty}
               </tbody>
             </table>
             {!noFooter && (

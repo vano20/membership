@@ -49,11 +49,23 @@ export default function AdminPage() {
     },
     {
       key: 'status',
-      label: 'Status'
+      label: 'Status',
+      render: item => (
+        <>
+          <StatusBadge status={item.status} />
+        </>
+      )
     },
     {
       key: 'actions',
-      label: ''
+      label: '',
+      render: item => (
+        <>
+          <a onClick={() => handleApproval(item)}>
+            Approve
+          </a>
+        </>
+      )
     }
   ]
 
@@ -86,7 +98,7 @@ export default function AdminPage() {
           <h2 className="text-2xl font-semibold">
             Approval
           </h2>
-          {/* <LogoutButton /> */}
+          <LogoutButton />
         </div>
         <section>
           <Table
@@ -95,28 +107,6 @@ export default function AdminPage() {
             isLoading={isFetching}
             headers={headers}
             data={data || []}
-            body_status={item =>
-              item && (
-                <>
-                  <StatusBadge
-                    status={item.status}
-                  />
-                </>
-              )
-            }
-            actions={item =>
-              item && (
-                <>
-                  <a
-                    onClick={() =>
-                      handleApproval(item)
-                    }
-                  >
-                    Approve
-                  </a>
-                </>
-              )
-            }
             onChangePage={handleUpdateMeta}
           />
         </section>

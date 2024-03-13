@@ -8,6 +8,7 @@ import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import StatusBadge from '/src/components/StatusBadge'
+import { mappingStatus } from './constant'
 
 const ENTER_CODE = 13
 
@@ -43,25 +44,32 @@ export default function RegistryPage() {
     {
       key: 'actions',
       label: '',
-      render: item => (
-        <>
-          <a
-            href={`${
-              import.meta.env.VITE_API_BASE_URL
-            }/download-pdf/${item.npwp}`}
-            target="_blank"
-            className="text-blue-600 hover:text-blue-300 cursor-pointer"
-          >
-            Download
-          </a>
-        </>
-      )
+      render: item =>
+        item?.status ===
+        mappingStatus.approved ? (
+          <>
+            <a
+              href={`${
+                import.meta.env.VITE_API_BASE_URL
+              }/download-pdf/${item.npwp}`}
+              target="_blank"
+              className="text-blue-600 hover:text-blue-300 cursor-pointer"
+            >
+              Download
+            </a>
+          </>
+        ) : (
+          <>-</>
+        )
     }
   ]
   const { data, isFetching, isError, error } =
-    useFetchRegistrationQuery(npwp, {
-      skip: !npwp
-    })
+    useFetchRegistrationQuery(
+      { npwp },
+      {
+        skip: !npwp
+      }
+    )
 
   const updateNpwp = value => {
     setNpwp(value)
@@ -79,7 +87,11 @@ export default function RegistryPage() {
 
   useEffect(() => {
     if (isError) {
-      const [firstError] = error.message
+      const [firstError] = Array.isArray(
+        error.message
+      )
+        ? error.message
+        : []
       toast.error(
         firstError ||
           'Terjadi kesalahan, silahkan coba lagi'

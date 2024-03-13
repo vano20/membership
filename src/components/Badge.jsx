@@ -12,7 +12,7 @@ export function Badge({
   }
   return (
     <div
-      className={`${mapping[variant]} rounded-md p-2 text-center`}
+      className={`${mapping[variant]} rounded-lg p-2 text-center`}
     >
       {label || children}
     </div>

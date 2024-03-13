@@ -59,7 +59,10 @@ const Table = ({
   )
 
   const renderedHeader = headers.map(
-    ({ label, key }, index) => {
+    (
+      { label, key, header, style = '' },
+      index
+    ) => {
       if (key === 'actions') {
         return (
           <th
@@ -77,9 +80,9 @@ const Table = ({
         <th
           key={`header-${key}-${index}`}
           scope="col"
-          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"
+          className={`py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase`}
         >
-          {label}
+          {header?.() || label}
         </th>
       )
     }
@@ -93,7 +96,12 @@ const Table = ({
             key={`data-${col.key}-${rowIndex}`}
             className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
           >
-            {col?.render?.(row) || row?.[col.key]}
+            <div
+              className={`truncate ${col.style}`}
+            >
+              {col?.render?.(row) ||
+                row?.[col.key]}
+            </div>
           </td>
         )
       })

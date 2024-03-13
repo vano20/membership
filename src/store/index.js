@@ -25,7 +25,10 @@ export {
   useFetchProvincesQuery,
   useFetchCitiesQuery
 } from './api/provinceApi'
-export { useAddRegistrationsMutation } from './api/registrationApi'
+export {
+  useAddRegistrationsMutation,
+  useUpdateRegistrationsStatusMutation
+} from './api/registrationApi'
 export {
   useLoginMutation,
   useLogoutMutation

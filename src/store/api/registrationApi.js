@@ -3,14 +3,28 @@ import {
   fetchBaseQuery
 } from '@reduxjs/toolkit/query/react'
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: `${
+    import.meta.env.VITE_API_BASE_URL
+  }/api/registrations`,
+  fetchFn: async (...args) => fetch(...args)
+})
+const baseQueryHandler = async (
+  args,
+  api,
+  opts
+) => {
+  const result = await baseQuery(args, api, opts)
+  if (result?.error?.status === 401) {
+    localStorage.setItem('isLoggedIn', null)
+    window.location.replace('/')
+  }
+  return result
+}
+
 const registrationApi = createApi({
   reducerPath: 'registrations',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${
-      import.meta.env.VITE_API_BASE_URL
-    }/api/registrations`,
-    fetchFn: async (...args) => fetch(...args)
-  }),
+  baseQuery: baseQueryHandler,
   endpoints(builder) {
     return {
       addRegistrations: builder.mutation({
@@ -24,15 +38,42 @@ const registrationApi = createApi({
         transformErrorResponse: response =>
           response.data?.errors
       }),
+      updateRegistrationsStatus: builder.mutation(
+        {
+          invalidatesTags: () => [
+            'Registrations'
+          ],
+          transformResponse: response =>
+            response.data,
+          transformErrorResponse: response =>
+            response.data?.errors,
+          query: ({ token, body }) => ({
+            method: 'PUT',
+            url: `/${body.id}`,
+            body: {
+              status: body.status,
+              membership_id: body.membership_id
+            },
+            headers: {
+              Authorization: token
+            }
+          })
+        }
+      ),
       fetchRegistration: builder.query({
         providesTags: () => ['Registrations'],
         transformResponse: response =>
           response.data,
         transformErrorResponse: response =>
           response.data?.errors,
-        query: npwp => ({
-          url: `/${npwp}`
-        })
+        query: ({ npwp, period }) => {
+          const query = period
+            ? `period=${period}`
+            : ''
+          return {
+            url: `/${npwp}?${query}`
+          }
+        }
       }),
       fetchListRegistration: builder.query({
         providesTags: () => ['Registrations'],
@@ -58,6 +99,7 @@ const registrationApi = createApi({
 export const {
   useAddRegistrationsMutation,
   useFetchRegistrationQuery,
-  useFetchListRegistrationQuery
+  useFetchListRegistrationQuery,
+  useUpdateRegistrationsStatusMutation
 } = registrationApi
 export { registrationApi }

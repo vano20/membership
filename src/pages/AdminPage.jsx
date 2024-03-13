@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
+import {
+  MdOutlineEmail,
+  MdPermContactCalendar,
+  MdPhoneAndroid
+} from 'react-icons/md'
+import toast from 'react-hot-toast'
 import LogoutButton from '/src/components/LogoutButton'
 import StatusBadge from '/src/components/StatusBadge'
 import Table from '/src/components/Table'
 import { useAuth } from '/src/context/useAuth'
 import { useFetchListRegistrationQuery } from '/src/store/api/registrationApi'
 import Modal from '/src/components/Modal'
-import {
-  MdOutlineEmail,
-  MdPermContactCalendar,
-  MdPhoneAndroid
-} from 'react-icons/md'
+import { useUpdateRegistrationsStatusMutation } from '/src/store'
+import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
 
 const INITIAL_META = {
   page: 1,
@@ -34,12 +37,21 @@ export default function AdminPage() {
   })
   const [showModal, setShowModal] =
     useState(false)
+  const [item, setItem] = useState({})
   const [detail, setDetail] = useState({})
-  const [term, setTerm] = useState('')
+  const [membershipId, setMembershipId] =
+    useState('')
   const {
     data: { data, meta: respMeta } = {},
     isFetching
   } = useFetchListRegistrationQuery(meta)
+  const [updateStatus, { isLoading }] =
+    useUpdateRegistrationsStatusMutation()
+  const { data: detailRegistration, isError } =
+    useFetchRegistrationQuery(item, {
+      skip:
+        !Object.keys(item).length && !showModal
+    })
   const headers = [
     {
       key: 'company_name',
@@ -82,6 +94,14 @@ export default function AdminPage() {
       )
     }
   ]
+  useEffect(() => {
+    if (detailRegistration && !isError) {
+      setMembershipId(
+        detailRegistration?.membership_id || ''
+      )
+      setDetail(detailRegistration)
+    }
+  }, [detailRegistration])
 
   useEffect(() => {
     setMetaData({
@@ -95,7 +115,7 @@ export default function AdminPage() {
   }, [respMeta])
 
   const handleShowModal = item => {
-    setDetail(item)
+    setItem(item)
     setShowModal(true)
   }
   const handleUpdateMeta = ({ page }) => {
@@ -104,24 +124,42 @@ export default function AdminPage() {
       page
     })
   }
-  const handleApproval = () => {
-    alert('approved')
+  const handleApproval = async () => {
+    try {
+      await updateStatus({
+        token: isLoggedIn,
+        body: {
+          ...detail,
+          status: 1,
+          membership_id: membershipId
+        }
+      })
+      toast.success('Approval berhasil!')
+      handleClose()
+    } catch (error) {
+      toast.error(
+        error.message ||
+          'Terjadi kesalahan saat approval.'
+      )
+    }
   }
   const handleClose = () => {
-    setDetail({})
+    if (isLoading) return
     setShowModal(false)
   }
   const footer = (
     <div className="flex gap-4">
       <button
         onClick={handleClose}
-        className="py-1 px-3 text-slate rounded-lg active:bg-slate-500/50 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-slate-500/10 hover:text-slate-500"
+        className="py-1 px-3 text-slate rounded-lg active:bg-slate-500/50 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-slate-500/10 hover:text-slate-500 disabled:bg-blue-500/20 disabled:text-slate-400"
+        disabled={isLoading}
       >
         Cancel
       </button>
       <button
         onClick={handleApproval}
-        className="py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500"
+        className="py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:bg-blue-500/20 disabled:text-slate-400"
+        disabled={isLoading}
       >
         Approve
       </button>
@@ -141,7 +179,7 @@ export default function AdminPage() {
         <h3 className="text-sm text-slate-500 capitalize mb-4">
           {`${
             detail?.company_address
-          }, ${detail?.provinces?.name.toLowerCase()}`}
+          }, ${detail?.provinces?.name?.toLowerCase()}, ${detail?.province?.name?.toLowerCase()}`}
         </h3>
         <div className="text-xl mb-4 font-semibold">
           Periode {detail?.period}
@@ -178,9 +216,11 @@ export default function AdminPage() {
         </div>
         <input
           className="focus:outline-none focus:ring-0 focus:border-blue-200/75 focus:shadow-md focus:shadow-blue-500/30 border border-slate-100 rounded-lg py-1 px-2 w-full h-12 shadow-md shadow-slate-500/30"
-          placeholder="Membership ID"
-          value={term}
-          onChange={e => setTerm(e.target.value)}
+          placeholder="Nomor anggota"
+          value={membershipId}
+          onChange={e =>
+            setMembershipId(e.target.value)
+          }
         />
       </div>
     </Modal>

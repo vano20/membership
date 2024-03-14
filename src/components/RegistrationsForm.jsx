@@ -18,8 +18,21 @@ import {
 } from 'formik'
 import * as Yup from 'yup'
 import toast from 'react-hot-toast'
+import { capitalize } from '../helper/string'
 
 const RegistrationsForm = () => {
+  const dataQualifications = [
+    'kecil',
+    'menengah',
+    'besar',
+    'spesialis'
+  ]
+  const qualifications = dataQualifications.map(
+    item => ({
+      label: capitalize(item),
+      value: item.toUpperCase()
+    })
+  )
   const [prov, setProv] = useState(null)
   const { data: provinces, isFetching } =
     useFetchProvincesQuery()
@@ -76,10 +89,16 @@ const RegistrationsForm = () => {
     values,
     action
   ) => {
-    const { province, city, ...rest } = values
+    const {
+      province,
+      city,
+      qualification,
+      ...rest
+    } = values
     const body = {
       ...rest,
-      province_id: city?.id
+      province_id: city?.id,
+      qualification: qualification?.value
     }
     const result = await addRegistration(body)
     if (!result?.error) {
@@ -123,9 +142,10 @@ const RegistrationsForm = () => {
     email: Yup.string()
       .email('Email tidak valid')
       .required('Masukkan email'),
-    qualification: Yup.string().required(
-      'Masukkan kualifikasi'
-    ),
+    qualification: Yup.object().shape({
+      label: Yup.string(),
+      value: Yup.string()
+    }),
     province: Yup.object()
       .shape({
         disabled: Yup.boolean(),
@@ -155,7 +175,7 @@ const RegistrationsForm = () => {
           position: '',
           company_address: '',
           npwp: '',
-          qualification: '',
+          qualification: null,
           province: null,
           city: null
         }}
@@ -198,15 +218,32 @@ const RegistrationsForm = () => {
                   }
                 />
               </div>
-              <div>
-                <Input
+              <div className="w-full">
+                <label className="block font-semibold mb-1">
+                  Kualifikasi
+                </label>
+                <Field name="qualification">
+                  {({ field, form }) => (
+                    <Select
+                      {...field}
+                      options={qualifications}
+                      placeholder="Pilih kualifikasi"
+                      noOptionsMessage="Data tidak ditemukan"
+                      isClearable
+                      isSearchable
+                      onChange={e =>
+                        form.setFieldValue(
+                          'qualification',
+                          e
+                        )
+                      }
+                    />
+                  )}
+                </Field>
+                <ErrorMessage
+                  component="a"
                   name="qualification"
-                  label="Kualifikasi"
-                  placeholder="Kualifikasi"
-                  isInvalid={
-                    touched.qualification &&
-                    errors.qualification
-                  }
+                  className="text-sm text-red-600"
                 />
               </div>
               <div>

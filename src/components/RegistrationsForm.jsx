@@ -16,23 +16,41 @@ import {
   Form,
   Formik
 } from 'formik'
-import * as Yup from 'yup'
 import toast from 'react-hot-toast'
 import { capitalize } from '../helper/string'
+import { registrationSchema } from '../validation/registration'
 
 const RegistrationsForm = () => {
+  const mapSelectOptions = (
+    arr,
+    callback = item => ({
+      label: capitalize(item),
+      value: item.toUpperCase()
+    })
+  ) => arr.map(callback)
   const dataQualifications = [
     'kecil',
     'menengah',
     'besar',
     'spesialis'
   ]
-  const qualifications = dataQualifications.map(
-    item => ({
-      label: capitalize(item),
-      value: item.toUpperCase()
-    })
+  const qualifications = mapSelectOptions(
+    dataQualifications
   )
+  const dataPositions = [
+    'direktur',
+    'diretur utama',
+    'wakil direktur'
+  ]
+  const positions = mapSelectOptions(
+    dataPositions
+  )
+  const dataType = ['PT', 'CV', 'Koperasi']
+  const types = mapSelectOptions(dataType, i => ({
+    label: i,
+    value: i
+  }))
+
   const [prov, setProv] = useState(null)
   const { data: provinces, isFetching } =
     useFetchProvincesQuery()
@@ -93,12 +111,14 @@ const RegistrationsForm = () => {
       province,
       city,
       qualification,
+      position,
       ...rest
     } = values
     const body = {
       ...rest,
       province_id: city?.id,
-      qualification: qualification?.value
+      qualification: qualification?.value,
+      position: position?.value
     }
     const result = await addRegistration(body)
     if (!result?.error) {
@@ -107,72 +127,16 @@ const RegistrationsForm = () => {
     }
   }
 
-  const registrationSchema = Yup.object().shape({
-    company_name: Yup.string().required(
-      'Masukkan nama perusahaan'
-    ),
-    contact_person: Yup.string().required(
-      'Masukkan nama penanggung jawab'
-    ),
-    phone_number: Yup.number(
-      'Telepon tidak valid'
-    )
-      .required('Masukkan Telepon')
-      .test(
-        'len',
-        'Telepon tidak valid',
-        val => val && val.toString().length <= 15
-      ),
-    position: Yup.string().required(
-      'Masukkan jabatan'
-    ),
-    company_address: Yup.string().required(
-      'Masukkan alamat perusahaan'
-    ),
-    npwp: Yup.number('NPWP tidak valid')
-      .required('Masukkan NPWP')
-      .test(
-        'len',
-        'NPWP tidak valid',
-        val =>
-          val &&
-          val.toString().length >= 15 &&
-          val.toString().length <= 16
-      ),
-    email: Yup.string()
-      .email('Email tidak valid')
-      .required('Masukkan email'),
-    qualification: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string()
-    }),
-    province: Yup.object()
-      .shape({
-        disabled: Yup.boolean(),
-        id: Yup.number(),
-        label: Yup.string(),
-        value: Yup.string()
-      })
-      .required('Pilih provinsi'),
-    city: Yup.object()
-      .shape({
-        disabled: Yup.boolean(),
-        id: Yup.number(),
-        label: Yup.string(),
-        value: Yup.string()
-      })
-      .required('Pilih kota/kabupaten')
-  })
-
   return (
     <>
       <Formik
         initialValues={{
+          company_type: null,
           company_name: '',
           contact_person: '',
           email: '',
           phone_number: '',
-          position: '',
+          position: null,
           company_address: '',
           npwp: '',
           qualification: null,
@@ -185,29 +149,67 @@ const RegistrationsForm = () => {
         {({ isSubmitting, errors, touched }) => (
           <Form>
             <div className="flex flex-col gap-4">
-              <div>
-                <Input
-                  name="company_name"
-                  label="Perusahaan"
-                  placeholder="Nama perusahaan"
-                  isInvalid={
-                    touched.company_name &&
-                    errors.company_name
-                  }
-                />
+              <div className="flex flex-col">
+                <label className="md:block hidden font-semibold mb-1">
+                  Perusahaan
+                </label>
+                <div className="flex md:justify-between md:flex-row flex-col justify-start items-center gap-4">
+                  <div className="md:w-1/3 w-full">
+                    <label className="block md:hidden font-semibold mb-1">
+                      Bentuk
+                    </label>
+                    <Field name="company_type">
+                      {({ field, form }) => (
+                        <Select
+                          {...field}
+                          options={types}
+                          placeholder="PT"
+                          noOptionsMessage="Data tidak ditemukan"
+                          isClearable
+                          isSearchable
+                          onChange={e =>
+                            form.setFieldValue(
+                              'company_type',
+                              e
+                            )
+                          }
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      component="a"
+                      name="company_type"
+                      className="text-sm text-red-600"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label className="block md:hidden font-semibold mb-1">
+                      Perusahaan
+                    </label>
+                    <Input
+                      name="company_name"
+                      placeholder="Nama perusahaan"
+                      isInvalid={
+                        touched.company_name &&
+                        errors.company_name
+                      }
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <Input
-                  name="contact_person"
-                  label="Penanggung jawab"
-                  placeholder="Nama penanggung jawab"
-                  isInvalid={
-                    touched.contact_person &&
-                    errors.contact_person
-                  }
-                />
-              </div>
-              <div>
+              <div className="flex md:justify-between md:flex-row flex-col justify-start items-center gap-4">
+                <div className="w-full">
+                  <Input
+                    name="contact_person"
+                    label="Penanggung jawab"
+                    placeholder="Nama penanggung jawab"
+                    isInvalid={
+                      touched.contact_person &&
+                      errors.contact_person
+                    }
+                  />
+                </div>
+                {/* <div>
                 <Input
                   name="position"
                   label="Jabatan"
@@ -217,6 +219,35 @@ const RegistrationsForm = () => {
                     errors.position
                   }
                 />
+              </div> */}
+                <div className="w-full">
+                  <label className="block font-semibold mb-1">
+                    Jabatan
+                  </label>
+                  <Field name="position">
+                    {({ field, form }) => (
+                      <Select
+                        {...field}
+                        options={positions}
+                        placeholder="Pilih jabatan"
+                        noOptionsMessage="Data tidak ditemukan"
+                        isClearable
+                        isSearchable
+                        onChange={e =>
+                          form.setFieldValue(
+                            'position',
+                            e
+                          )
+                        }
+                      />
+                    )}
+                  </Field>
+                  <ErrorMessage
+                    component="a"
+                    name="position"
+                    className="text-sm text-red-600"
+                  />
+                </div>
               </div>
               <div className="w-full">
                 <label className="block font-semibold mb-1">
@@ -281,67 +312,73 @@ const RegistrationsForm = () => {
                   }
                 />
               </div>
-              <label className="block font-semibold">
-                Alamat
-              </label>
-              <div className="flex md:justify-between md:flex-row flex-col justify-start items-center gap-4">
-                <div className="w-full">
-                  <Field name="province">
-                    {({ field, form }) => (
-                      <Select
-                        {...field}
-                        options={provinces || []}
-                        placeholder="Pilih provinsi"
-                        noOptionsMessage="Data tidak ditemukan"
-                        loading={isFetching}
-                        isDisabled={isFetching}
-                        isClearable
-                        isSearchable
-                        onChange={e =>
-                          handleSelectProv(
-                            e,
-                            form
-                          )
-                        }
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    component="a"
-                    name="province"
-                    className="text-sm text-red-600"
-                  />
-                </div>
-                <div className="w-full">
-                  <Field name="city">
-                    {({ field, form }) => (
-                      <Select
-                        {...field}
-                        options={
-                          (prov && cities) || []
-                        }
-                        placeholder="Pilih kota/kabupaten"
-                        noOptionsMessage="Data tidak ditemukan"
-                        loading={isFetchingCities}
-                        isDisabled={
-                          isFetchingCities
-                        }
-                        isClearable
-                        isSearchable
-                        onChange={e =>
-                          form.setFieldValue(
-                            'city',
-                            e
-                          )
-                        }
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    component="a"
-                    name="city"
-                    className="text-sm text-red-600"
-                  />
+              <div>
+                <label className="block font-semibold mb-1">
+                  Alamat
+                </label>
+                <div className="flex md:justify-between md:flex-row flex-col justify-start items-center gap-4">
+                  <div className="w-full">
+                    <Field name="province">
+                      {({ field, form }) => (
+                        <Select
+                          {...field}
+                          options={
+                            provinces || []
+                          }
+                          placeholder="Pilih provinsi"
+                          noOptionsMessage="Data tidak ditemukan"
+                          loading={isFetching}
+                          isDisabled={isFetching}
+                          isClearable
+                          isSearchable
+                          onChange={e =>
+                            handleSelectProv(
+                              e,
+                              form
+                            )
+                          }
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      component="a"
+                      name="province"
+                      className="text-sm text-red-600"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <Field name="city">
+                      {({ field, form }) => (
+                        <Select
+                          {...field}
+                          options={
+                            (prov && cities) || []
+                          }
+                          placeholder="Pilih kota/kabupaten"
+                          noOptionsMessage="Data tidak ditemukan"
+                          loading={
+                            isFetchingCities
+                          }
+                          isDisabled={
+                            isFetchingCities
+                          }
+                          isClearable
+                          isSearchable
+                          onChange={e =>
+                            form.setFieldValue(
+                              'city',
+                              e
+                            )
+                          }
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      component="a"
+                      name="city"
+                      className="text-sm text-red-600"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="w-full">
@@ -349,7 +386,7 @@ const RegistrationsForm = () => {
                   {({ field, form }) => (
                     <textarea
                       {...field}
-                      className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 border border-slate-100 rounded-md p-1 min-w-full focus:shadow-md focus:shadow-blue-500/30 ${
+                      className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 border border-slate-300 rounded-md p-1 min-w-full focus:shadow-md focus:shadow-blue-500/30 ${
                         form.touched & form.errors
                           ? 'border-red-600/50'
                           : ''
@@ -380,7 +417,7 @@ const RegistrationsForm = () => {
             <div className="mt-8 flex justify-end">
               <button
                 type="submit"
-                className={`py-1 px-3 text-white rounded active:bg-blue-500/50 bg-blue-500`}
+                className={`py-1 px-3 text-white rounded active:bg-blue-500/50 bg-blue-500 disabled:bg-slate-400 border-transparent`}
                 disabled={
                   isPageLoading || isSubmitting
                 }

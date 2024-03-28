@@ -163,10 +163,9 @@ const RegistrationsForm = () => {
                         <Select
                           {...field}
                           options={types}
-                          placeholder="PT"
+                          placeholder="Bentuk"
                           noOptionsMessage="Data tidak ditemukan"
                           isClearable
-                          isSearchable
                           onChange={e =>
                             form.setFieldValue(
                               'company_type',
@@ -232,7 +231,6 @@ const RegistrationsForm = () => {
                         placeholder="Pilih jabatan"
                         noOptionsMessage="Data tidak ditemukan"
                         isClearable
-                        isSearchable
                         onChange={e =>
                           form.setFieldValue(
                             'position',

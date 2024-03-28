@@ -91,6 +91,38 @@ const registrationApi = createApi({
             Authorization: token
           }
         })
+      }),
+      fetchSummary: builder.query({
+        providesTags: () => ['Registrations'],
+        transformResponse: response =>
+          response.data,
+        transformErrorResponse: response =>
+          response.data?.errors,
+        query: period => {
+          const query = period
+            ? new URLSearchParams({
+                period
+              }).toString()
+            : ''
+          return {
+            url: `/summary?${query}`
+          }
+        }
+      }),
+      fetchSummaryCity: builder.query({
+        providesTags: () => ['Registrations'],
+        transformResponse: response =>
+          response.data,
+        transformErrorResponse: response =>
+          response.data?.errors,
+        query: ({ period, provinceCode }) => {
+          const query = new URLSearchParams({
+            period
+          }).toString()
+          return {
+            url: `/summary/city/${provinceCode}?${query}`
+          }
+        }
       })
     }
   }
@@ -100,6 +132,8 @@ export const {
   useAddRegistrationsMutation,
   useFetchRegistrationQuery,
   useFetchListRegistrationQuery,
-  useUpdateRegistrationsStatusMutation
+  useUpdateRegistrationsStatusMutation,
+  useFetchSummaryQuery,
+  useFetchSummaryCityQuery
 } = registrationApi
 export { registrationApi }

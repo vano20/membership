@@ -14,6 +14,7 @@ import {
 } from './context/useAuth.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
+import SummaryPage from './pages/SummaryPage.jsx'
 
 const GuestRoutes = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -50,6 +51,10 @@ const router = createHashRouter([
       {
         path: '/registry',
         element: <RegistryPage />
+      },
+      {
+        path: '/summary',
+        element: <SummaryPage />
       }
     ]
   },

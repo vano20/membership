@@ -109,8 +109,8 @@ export default function RegistryPage() {
     }, [data, npwp])
 
   return (
-    <div className="w-screen md:min-h-screen overflow-auto w-full bg-gradient-to-r from-teal-400 to-cyan-500">
-      <div className="h-screen w-full md:w-1/2 mx-auto bg-neutral-200 p-8 rounded-md border-slate-500 shadow-md shadow-cyan-500">
+    <div className="w-screen md:min-h-screen overflow-auto w-full bg-white py-8">
+      <div className="w-full md:w-1/2 mx-auto bg-slate-200 p-8 rounded-md border-slate-500 shadow-lg shadow-slate-300">
         <div className="flex md:flex-row md:justify-between flex-col gap-4 mb-4">
           <h2 className="text-2xl font-semibold capitalize mb-4 text-gray-700">
             Cek proses pendaftaran

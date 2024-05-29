@@ -156,7 +156,7 @@ const Table = ({
               </tbody>
             </table>
             {!noFooter && (
-              <div className="flex justify-between items-center text-sm p-4">
+              <div className="flex justify-between items-center text-sm p-4 bg-gray-100">
                 <div className="text-slate-500">
                   Showing {metaData.from} -{' '}
                   {metaData.to} of{' '}

@@ -168,9 +168,9 @@ export default function AdminPage() {
   const modal = (
     <Modal onClose={handleClose} footer={footer}>
       <div className="text-wrap break-words">
-        <h1 className="text-3xl font-semibold flex items-center gap-4">
+        <h1 className="text-3xl font-semibold flex items-start gap-4 mb-2">
           {detail?.company_name}{' '}
-          <div className="inline-block text-sm">
+          <div className="inline-block text-sm ml-auto">
             <StatusBadge
               status={detail?.status}
             />
@@ -185,20 +185,20 @@ export default function AdminPage() {
           Periode {detail?.period}
         </div>
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 rounded-lg bg-sky-300/20 p-2 w-fit">
+          <div className="flex gap-2 p-2 w-fit">
             <MdPermContactCalendar size={24} />
             {detail?.contact_person},{' '}
             {detail?.position}
           </div>
-          <div className="flex gap-2 rounded-lg bg-sky-300/20 p-2 w-fit">
+          <div className="flex gap-2 p-2 w-fit">
             <MdOutlineEmail size={24} />
             {detail?.email}
           </div>
-          <div className="flex gap-2 rounded-lg bg-sky-300/20 p-2 w-fit">
+          <div className="flex gap-2 p-2 w-fit">
             <MdPhoneAndroid size={24} />
             {detail?.phone_number}
           </div>
-          <div className="flex gap-2 rounded-lg bg-sky-300/20 p-2 w-fit">
+          <div className="flex gap-2 p-2 w-fit">
             <span className="font-semibold">
               NPWP
             </span>
@@ -228,7 +228,7 @@ export default function AdminPage() {
 
   return (
     <>
-      <div className="flex flex-col md:w-1/2 w-full h-full bg-slate-50 border-2 rounded-md border-slate-100 shadow-lg mx-auto p-8">
+      <div className="flex flex-col md:w-1/2 w-full h-full bg-slate-200 border-2 rounded-md shadow-lg shadow-slate-300 mx-auto p-8 border-transparent">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">
             Approval

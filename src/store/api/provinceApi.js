@@ -7,9 +7,8 @@ import { capitalize } from '/src/helper/string'
 const provinceApi = createApi({
   reducerPath: 'provinces',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${
-      import.meta.env.VITE_API_BASE_URL
-    }/api/provinces`,
+    baseUrl: `${import.meta.env.VITE_API_BASE_URL
+      }/api/provinces`,
     fetchFn: async (...args) => fetch(...args)
   }),
   endpoints(builder) {

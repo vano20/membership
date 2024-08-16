@@ -15,6 +15,7 @@ import {
 import AdminPage from './pages/AdminPage.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import SummaryPage from './pages/SummaryPage.jsx'
+import AdminEditPage from './pages/AdminEditPage.jsx'
 
 const GuestRoutes = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -22,6 +23,7 @@ const GuestRoutes = ({ children }) => {
     return <Navigate to="/admin" replace />
   return children
 }
+
 const AdminRoutes = ({ children }) => {
   const { isLoggedIn } = useAuth()
   if (!isLoggedIn)
@@ -71,7 +73,11 @@ const router = createHashRouter([
       {
         index: true,
         element: <AdminPage />
-      }
+      },
+      {
+        path: '/admin/form/:id',
+        element: <AdminEditPage />
+      },
     ]
   }
 ])

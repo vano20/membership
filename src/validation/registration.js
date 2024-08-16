@@ -23,7 +23,11 @@ export const registrationSchema =
         'Telepon tidak valid',
         val => val && val.toString().length <= 15
       ),
-    position: Yup.string().required(
+    position: Yup.object().shape({
+      label: Yup.string(),
+      value: Yup.string(),
+      disabled: Yup.boolean(),
+    }).required(
       'Masukkan jabatan'
     ),
     company_address: Yup.string().required(

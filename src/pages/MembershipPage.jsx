@@ -16,7 +16,9 @@ export default function MembershipPage() {
               className="rounded-md"
             />
           </div>
+
           <RegistrationsForm />
+
           <div className="text-center mt-2 mb-0">
             Sudah mendaftar?
             <Link

@@ -28,8 +28,10 @@ export {
 export {
   useAddRegistrationsMutation,
   useUpdateRegistrationsStatusMutation,
+  useUpdateRegistrationsMutation,
   useFetchSummaryQuery,
-  useFetchSummaryCityQuery
+  useFetchSummaryCityQuery,
+  useFetchRegistrationDetailQuery,
 } from './api/registrationApi'
 export {
   useLoginMutation,

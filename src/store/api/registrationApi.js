@@ -4,9 +4,8 @@ import {
 } from '@reduxjs/toolkit/query/react'
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${
-    import.meta.env.VITE_API_BASE_URL
-  }/api/registrations`,
+  baseUrl: `${import.meta.env.VITE_API_BASE_URL
+    }/api/registrations`,
   fetchFn: async (...args) => fetch(...args)
 })
 const baseQueryHandler = async (
@@ -52,7 +51,7 @@ const registrationApi = createApi({
             url: `/${body.id}`,
             body: {
               status: body.status,
-              membership_id: body.membership_id
+              membership_id: body.membership_id,
             },
             headers: {
               Authorization: token
@@ -60,6 +59,37 @@ const registrationApi = createApi({
           })
         }
       ),
+      updateRegistrations: builder.mutation(
+        {
+          invalidatesTags: () => [
+            'Registrations'
+          ],
+          transformResponse: response =>
+            response.data,
+          transformErrorResponse: response =>
+            response.data?.errors,
+          query: ({ id, token, ...body }) => ({
+            method: 'PUT',
+            url: `/${id}`,
+            body,
+            headers: {
+              Authorization: token
+            }
+          })
+        }
+      ),
+      fetchRegistrationDetail: builder.query({
+        providesTags: () => ['Registrations'],
+        transformResponse: response =>
+          response.data,
+        transformErrorResponse: response =>
+          response.data?.errors,
+        query: ({ id }) => {
+          return {
+            url: `/detail/${id}`
+          }
+        }
+      }),
       fetchRegistration: builder.query({
         providesTags: () => ['Registrations'],
         transformResponse: response =>
@@ -84,13 +114,30 @@ const registrationApi = createApi({
         query: ({
           token,
           page = 1,
-          size = 10
-        }) => ({
-          url: `?page=${page}&size=${size}`,
-          headers: {
-            Authorization: token
+          size = 10,
+          npwp,
+          prov,
+          period,
+          status,
+        }) => {
+          const query = {
+            page,
+            size,
+            ...(npwp && { npwp }),
+            ...(prov && { prov }),
+            ...(period && { period }),
+            ...(status && { status })
           }
-        })
+          const params = new URLSearchParams(query).toString();
+          const url = `?${params}`
+
+          return {
+            url,
+            headers: {
+              Authorization: token
+            }
+          }
+        }
       }),
       fetchSummary: builder.query({
         providesTags: () => ['Registrations'],
@@ -101,8 +148,8 @@ const registrationApi = createApi({
         query: period => {
           const query = period
             ? new URLSearchParams({
-                period
-              }).toString()
+              period
+            }).toString()
             : ''
           return {
             url: `/summary?${query}`
@@ -131,8 +178,10 @@ const registrationApi = createApi({
 export const {
   useAddRegistrationsMutation,
   useFetchRegistrationQuery,
+  useFetchRegistrationDetailQuery,
   useFetchListRegistrationQuery,
   useUpdateRegistrationsStatusMutation,
+  useUpdateRegistrationsMutation,
   useFetchSummaryQuery,
   useFetchSummaryCityQuery
 } = registrationApi

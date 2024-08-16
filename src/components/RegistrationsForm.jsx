@@ -6,60 +6,90 @@ import {
 } from 'react'
 import Select from 'react-tailwindcss-select'
 import {
-  useAddRegistrationsMutation,
-  useFetchCitiesQuery,
-  useFetchProvincesQuery
-} from '/src/store'
-import {
   ErrorMessage,
   Field,
   Form,
   Formik
 } from 'formik'
 import toast from 'react-hot-toast'
+import ModalSuccess from './ModalSuccess'
+import { useParams } from 'react-router-dom'
 import { capitalize } from '../helper/string'
 import { registrationSchema } from '../validation/registration'
+import {
+  useAddRegistrationsMutation,
+  useUpdateRegistrationsMutation,
+  useFetchCitiesQuery,
+  useFetchProvincesQuery,
+  useFetchRegistrationDetailQuery,
+} from '/src/store'
+import { useAuth } from '/src/context/useAuth'
+
+const dataQualifications = [
+  'kecil',
+  'menengah',
+  'besar',
+  'spesialis'
+]
+const dataPositions = [
+  'direktur',
+  'diretur utama',
+  'wakil direktur'
+]
+const dataType = ['PT', 'CV', 'Koperasi']
+
+const initialValue = {
+  company_type: null,
+  company_name: '',
+  contact_person: '',
+  email: '',
+  phone_number: '',
+  position: null,
+  company_address: '',
+  npwp: '',
+  qualification: null,
+  province: null,
+  city: null
+}
+
+const mapSelectOptions = (
+  arr,
+  callback = item => ({
+    label: capitalize(item),
+    value: item.toUpperCase()
+  })
+) => arr.map(callback)
+
+const qualifications = mapSelectOptions(
+  dataQualifications
+)
+const positions = mapSelectOptions(
+  dataPositions
+)
+const types = mapSelectOptions(dataType, i => ({
+  label: i,
+  value: i
+}))
 
 const RegistrationsForm = () => {
-  const mapSelectOptions = (
-    arr,
-    callback = item => ({
-      label: capitalize(item),
-      value: item.toUpperCase()
-    })
-  ) => arr.map(callback)
-  const dataQualifications = [
-    'kecil',
-    'menengah',
-    'besar',
-    'spesialis'
-  ]
-  const qualifications = mapSelectOptions(
-    dataQualifications
-  )
-  const dataPositions = [
-    'direktur',
-    'diretur utama',
-    'wakil direktur'
-  ]
-  const positions = mapSelectOptions(
-    dataPositions
-  )
-  const dataType = ['PT', 'CV', 'Koperasi']
-  const types = mapSelectOptions(dataType, i => ({
-    label: i,
-    value: i
-  }))
+  const { id } = useParams()
+  const { isLoggedIn } = useAuth()
 
   const [prov, setProv] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const [registeredNpwp, setRegisteredNpwp] = useState('')
+  const [initValue, setInitValue] = useState(initialValue)
+
   const { data: provinces, isFetching } =
     useFetchProvincesQuery()
+
   const {
     data: cities,
     isFetching: isFetchingCities
   } = useFetchCitiesQuery(prov, {
     skip: !prov
   })
+
   const [
     addRegistration,
     {
@@ -72,26 +102,77 @@ const RegistrationsForm = () => {
     }
   ] = useAddRegistrationsMutation()
 
+  const { data: detail, isFetching: isFetchingDetail } =
+    useFetchRegistrationDetailQuery({ id }, {
+      skip: !id
+    })
+
+  const [
+    updateRegistration,
+    {
+      isError: isErrorUpdate,
+      isLoading: isLoadingUpdate,
+      isSuccess: isSuccessUpdate,
+      error: errorUpdate,
+      status: statusUpdate,
+      ...allObjUpdate
+    }
+  ] = useUpdateRegistrationsMutation()
+
   const [isPageLoading] = useMemo(() => {
     return [
       isLoading ||
-        isFetching ||
-        status === 'pending'
+      isFetching ||
+      isFetchingDetail ||
+      isLoadingUpdate ||
+      status === 'pending'
     ]
-  }, [isLoading, isFetching, status])
+  }, [isLoading, isLoadingUpdate, isFetching, isFetchingDetail, status])
+
+  useEffect(() => {
+    if (id && detail) {
+      setInitValue({
+        ...initialValue,
+        company_name: detail.company_name,
+        contact_person: detail.contact_person,
+        email: detail.email,
+        phone_number: detail.email,
+        position: positions.find(({ value }) => value.toUpperCase() === detail.position.toUpperCase()),
+        company_address: detail.company_address,
+        npwp: detail.npwp,
+        qualification: qualifications.find(({ value }) => value.toUpperCase() === detail.qualification.toUpperCase()),
+        province: {
+          ...detail.province,
+          value: detail.province.id,
+          label: capitalize(detail.province.name),
+        },
+        city: {
+          ...detail.provinces,
+          value: detail.provinces.id,
+          label: capitalize(detail.provinces.name),
+        },
+        company_type: types.find(({ value }) => value === detail.company_type),
+      })
+    }
+  }, [detail, id])
 
   useEffect(() => {
     if (isError) {
-      const [firstError] = error.npwp
+      const [firstError] = error?.npwp ?? []
       toast.error(
         firstError ||
-          'Terjadi kesalahan, silahkan coba lagi'
+        'Terjadi kesalahan, silahkan coba lagi'
       )
-    } else if (isSuccess)
+    } else if (isSuccess) {
       toast.success(
         'Registrasi berhasil, data akan di validasi oleh admin terlebih dahulu'
       )
-  }, [isError, isSuccess])
+    }
+  }, [isError, isErrorUpdate, isSuccess, isSuccessUpdate])
+
+  useEffect(() => {
+    if (registeredNpwp) setShowModal(true)
+  }, [registeredNpwp])
 
   const handleSelectProv = (value, form) => {
     const name = 'province'
@@ -103,7 +184,8 @@ const RegistrationsForm = () => {
       form.setFieldTouched(name, true)
     }
   }
-  const handlFormSubmit = async (
+
+  const handleFormSubmit = async (
     values,
     action
   ) => {
@@ -112,15 +194,23 @@ const RegistrationsForm = () => {
       city,
       qualification,
       position,
+      company_type,
       ...rest
     } = values
     const body = {
       ...rest,
+      ...(id && { id, token: isLoggedIn }),
       province_id: city?.id,
       qualification: qualification?.value,
-      position: position?.value
+      position: position?.value,
+      company_type: company_type?.value
     }
-    const result = await addRegistration(body)
+    const submitFunc = id ? updateRegistration : addRegistration
+
+    const result = await submitFunc(body)
+
+    setRegisteredNpwp(result?.data?.data?.npwp || '')
+
     if (!result?.error) {
       action.setSubmitting(false)
       action.resetForm()
@@ -130,21 +220,10 @@ const RegistrationsForm = () => {
   return (
     <>
       <Formik
-        initialValues={{
-          company_type: null,
-          company_name: '',
-          contact_person: '',
-          email: '',
-          phone_number: '',
-          position: null,
-          company_address: '',
-          npwp: '',
-          qualification: null,
-          province: null,
-          city: null
-        }}
+        initialValues={initValue}
         validationSchema={registrationSchema}
-        onSubmit={handlFormSubmit}
+        onSubmit={handleFormSubmit}
+        enableReinitialize
       >
         {({ isSubmitting, errors, touched }) => (
           <Form>
@@ -277,7 +356,6 @@ const RegistrationsForm = () => {
               </div>
               <div>
                 <Input
-                  type="number"
                   name="phone_number"
                   label="Nomor telepon"
                   placeholder="Nomor telepon"
@@ -384,11 +462,10 @@ const RegistrationsForm = () => {
                   {({ field, form }) => (
                     <textarea
                       {...field}
-                      className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 border border-slate-300 rounded-md p-1 min-w-full focus:shadow-md focus:shadow-blue-500/30 ${
-                        form.touched & form.errors
-                          ? 'border-red-600/50'
-                          : ''
-                      }`}
+                      className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 border border-slate-300 rounded-md p-1 min-w-full focus:shadow-md focus:shadow-blue-500/30 ${form.touched & form.errors
+                        ? 'border-red-600/50'
+                        : ''
+                        }`}
                       placeholder="Masukkan alamat"
                     />
                   )}
@@ -415,7 +492,7 @@ const RegistrationsForm = () => {
             <div className="mt-8 flex justify-end">
               <button
                 type="submit"
-                className={`py-1 px-3 text-white rounded active:bg-blue-500/50 bg-blue-500 disabled:bg-slate-400 border-transparent`}
+                className={`py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 disabled:bg-slate-400 border-transparent`}
                 disabled={
                   isPageLoading || isSubmitting
                 }
@@ -428,6 +505,8 @@ const RegistrationsForm = () => {
           </Form>
         )}
       </Formik>
+
+      <ModalSuccess npwp={registeredNpwp} showModal={showModal} handleChange={(val) => setShowModal(val)} />
     </>
   )
 }

@@ -97,9 +97,9 @@ const Table = ({
             className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
           >
             <div
-              className={`truncate ${col.style}`}
+              className={`truncate ${col.style || ''}`}
             >
-              {col?.render?.(row) ||
+              {col?.render?.(row, rowIndex) ||
                 row?.[col.key]}
             </div>
           </td>
@@ -117,6 +117,7 @@ const Table = ({
       )
     }
   )
+
   const renderedEmpty = (
     <tr
       key={`data-row-empty`}
@@ -164,11 +165,10 @@ const Table = ({
                 </div>
                 <div className="text-slate-500 flex gap-2">
                   <div
-                    className={`flex items-center min-h-full ${
-                      meta.page === 1
-                        ? 'cursor-not-allowed'
-                        : 'cursor-pointer'
-                    }`}
+                    className={`flex items-center min-h-full ${meta.page === 1
+                      ? 'cursor-not-allowed'
+                      : 'cursor-pointer'
+                      }`}
                     onClick={() =>
                       handlePage(meta.page - 1)
                     }
@@ -185,11 +185,10 @@ const Table = ({
                     />
                   </div>
                   <div
-                    className={`flex items-center min-h-full ${
-                      isLastPage
-                        ? 'cursor-not-allowed'
-                        : 'cursor-pointer'
-                    }`}
+                    className={`flex items-center min-h-full ${isLastPage
+                      ? 'cursor-not-allowed'
+                      : 'cursor-pointer'
+                      }`}
                     onClick={() =>
                       handlePage(meta.page + 1)
                     }

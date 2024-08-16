@@ -8,9 +8,7 @@ import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import StatusBadge from '/src/components/StatusBadge'
-import { mappingStatus } from './constant'
-
-const ENTER_CODE = 13
+import { ENTER_CODE, mappingStatus } from './constant'
 
 export default function RegistryPage() {
   const [npwp, setNpwp] = useState('')
@@ -46,12 +44,11 @@ export default function RegistryPage() {
       label: '',
       render: item =>
         item?.status ===
-        mappingStatus.approved ? (
+          mappingStatus.approved ? (
           <>
             <a
-              href={`${
-                import.meta.env.VITE_API_BASE_URL
-              }/download-pdf/${item.npwp}`}
+              href={`${import.meta.env.VITE_API_BASE_URL
+                }/download-pdf/${item.npwp}`}
               target="_blank"
               className="text-blue-600 hover:text-blue-300 cursor-pointer"
             >
@@ -94,7 +91,7 @@ export default function RegistryPage() {
         : []
       toast.error(
         firstError ||
-          'Terjadi kesalahan, silahkan coba lagi'
+        'Terjadi kesalahan, silahkan coba lagi'
       )
     }
   }, [isError])

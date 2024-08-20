@@ -1,0 +1,1 @@
+export const logoGakindo = 'https://gakindo.or.id/wp-content/uploads/2021/07/Gabungan-Kontraktor-Indonesia.jpg'

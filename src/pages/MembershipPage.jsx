@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import RegistrationsForm from '/src/components/RegistrationsForm'
+import { logoGakindo } from '../helper/assets'
 
 export default function MembershipPage() {
   return (
@@ -11,7 +12,7 @@ export default function MembershipPage() {
               Registrasi
             </h2>
             <img
-              src="https://gakindo.org/wp-content/uploads/2021/07/Gabungan-Kontraktor-Indonesia.jpg"
+              src={logoGakindo}
               width="200px"
               className="rounded-md"
             />

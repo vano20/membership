@@ -1,3 +1,4 @@
+import { logoGakindo } from '../helper/assets'
 import LoginForm from '/src/components/LoginForm'
 
 export default function LoginPage() {
@@ -10,7 +11,7 @@ export default function LoginPage() {
               Login
             </h2>
             <img
-              src="https://gakindo.org/wp-content/uploads/2021/07/Gabungan-Kontraktor-Indonesia.jpg"
+              src={logoGakindo}
               width="200px"
               className="rounded-md"
             />

@@ -136,7 +136,7 @@ const RegistrationsForm = () => {
         company_name: detail.company_name,
         contact_person: detail.contact_person,
         email: detail.email,
-        phone_number: detail.email,
+        phone_number: detail.phone_number,
         position: positions.find(({ value }) => value.toUpperCase() === detail.position.toUpperCase()),
         company_address: detail.company_address,
         npwp: detail.npwp,
@@ -147,9 +147,9 @@ const RegistrationsForm = () => {
           label: capitalize(detail.province.name),
         },
         city: {
-          ...detail.provinces,
-          value: detail.provinces.id,
-          label: capitalize(detail.provinces.name),
+          ...detail.city,
+          value: detail.city.id,
+          label: capitalize(detail.city.name),
         },
         company_type: types.find(({ value }) => value === detail.company_type),
       })
@@ -157,6 +157,7 @@ const RegistrationsForm = () => {
   }, [detail, id])
 
   useEffect(() => {
+    let message = ''
     if (isError) {
       const [firstError] = error?.npwp ?? []
       toast.error(
@@ -164,10 +165,14 @@ const RegistrationsForm = () => {
         'Terjadi kesalahan, silahkan coba lagi'
       )
     } else if (isSuccess) {
-      toast.success(
-        'Registrasi berhasil, data akan di validasi oleh admin terlebih dahulu'
-      )
+      message = 'Registrasi berhasil, data akan di validasi oleh admin terlebih dahulu'
+    } else if (isSuccessUpdate) {
+      message = 'Update data berhasil'
     }
+
+    toast.success(
+      message
+    )
   }, [isError, isErrorUpdate, isSuccess, isSuccessUpdate])
 
   useEffect(() => {

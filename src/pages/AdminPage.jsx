@@ -15,6 +15,7 @@ import { useUpdateRegistrationsStatusMutation } from '/src/store'
 import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
 import { Link } from 'react-router-dom'
 import FilterAdminTable from '../components/FilterAdminTable'
+import { mappingStatus } from './constant'
 
 const INITIAL_META = {
   page: 1,
@@ -27,8 +28,6 @@ const INITIAL_META_DATA = {
   to: 1,
   last_page: 1
 }
-
-const APPROVAL = 1;
 
 export default function AdminPage() {
   const { isLoggedIn } = useAuth()
@@ -202,13 +201,13 @@ export default function AdminPage() {
         Save
       </button>
 
-      <button
-        onClick={() => handleSubmit(APPROVAL)}
+      {detail?.status === mappingStatus.pending && <button
+        onClick={() => handleSubmit(mappingStatus.approved)}
         className="py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:bg-blue-500/20 disabled:text-slate-400"
         disabled={isLoading}
       >
         Approve
-      </button>
+      </button>}
     </div>
   )
 

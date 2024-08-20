@@ -203,7 +203,8 @@ const RegistrationsForm = () => {
       province_id: city?.id,
       qualification: qualification?.value,
       position: position?.value,
-      company_type: company_type?.value
+      company_type: company_type?.value,
+      province_code: province?.value,
     }
     const submitFunc = id ? updateRegistration : addRegistration
 

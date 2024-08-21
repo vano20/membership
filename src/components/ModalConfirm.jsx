@@ -1,9 +1,8 @@
-import { MdOutlineWhatsapp } from 'react-icons/md'
+import { useState } from 'react'
 import Modal from '/src/components/Modal'
 
-export default function ModalSuccess({ npwp = '', showModal, handleChange }) {
-  const wa = `https://wa.me/?text=Saya telah melakukan pendaftaran dengan nomor register ${npwp}`
-
+export default function ModalSuccess({ showModal, title = '', desc = '', submitText = 'Confirm', cancelText = 'Close', handleChange, onSubmit }) {
+  const [isLoading, setIsLoading] = useState(false)
   const onClose = () => {
     handleChange(false)
   }
@@ -14,7 +13,14 @@ export default function ModalSuccess({ npwp = '', showModal, handleChange }) {
         onClick={onClose}
         className="py-1 px-3 text-slate rounded-lg active:bg-slate-500/50 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-slate-500/10 hover:text-slate-500 disabled:bg-blue-500/20 disabled:text-slate-400"
       >
-        Close
+        {cancelText}
+      </button>
+      <button
+        onClick={() => onSubmit({ done: () => setIsLoading(false) })}
+        className="py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:bg-blue-500/20 disabled:text-slate-400"
+        disabled={isLoading}
+      >
+        {submitText}
       </button>
     </div>
   )
@@ -23,16 +29,10 @@ export default function ModalSuccess({ npwp = '', showModal, handleChange }) {
     <Modal onClose={onClose} footer={footer}>
       <div className="flex flex-col items-start gap-4 text-wrap break-words">
         <h1 className="text-3xl font-semibold">
-          Registrasi berhasil !
+          {title}
         </h1>
         <p>
-          Silahkan menghubungi admin terkait pembayaran pada nomor whatsapp berikut
-        </p>
-        <p>
-          <a href={encodeURI(wa)} target="_blank" className="ml-1 text-blue-600 hover:text-blue-500/30 flex justify-center items-center">
-            <MdOutlineWhatsapp size={24} className="inline mr-2" />
-            +628113000047
-          </a>
+          {desc}
         </p>
       </div>
     </Modal>

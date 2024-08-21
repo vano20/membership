@@ -6,7 +6,7 @@ import {
 } from '/src/store'
 import { useMemo } from "react";
 
-const currentYear = 2025
+const currentYear = new Date().getFullYear()
 const lengthPeriods = currentYear - 2024
 const periods = Array.from({ length: lengthPeriods + 1 }).map((_, index) => {
   const firstYear = currentYear - lengthPeriods

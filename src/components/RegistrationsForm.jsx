@@ -170,7 +170,7 @@ const RegistrationsForm = () => {
       message = 'Update data berhasil'
     }
 
-    toast.success(
+    if (message) toast.success(
       message
     )
   }, [isError, isErrorUpdate, isSuccess, isSuccessUpdate])
@@ -384,11 +384,9 @@ const RegistrationsForm = () => {
               </div>
               <div>
                 <Input
-                  type="number"
                   label="NPWP"
                   name="npwp"
                   placeholder="NPWP perusahaan"
-                  min="0"
                   isInvalid={
                     touched.npwp && errors.npwp
                   }

@@ -33,7 +33,7 @@ export const registrationSchema =
     company_address: Yup.string().required(
       'Masukkan alamat perusahaan'
     ),
-    npwp: Yup.number('NPWP tidak valid')
+    npwp: Yup.string('NPWP tidak valid')
       .required('Masukkan NPWP')
       .test(
         'len',

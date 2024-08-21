@@ -32,6 +32,9 @@ export {
   useFetchSummaryQuery,
   useFetchSummaryCityQuery,
   useFetchRegistrationDetailQuery,
+  useFetchListRegistrationQuery,
+  useFetchRegistrationQuery,
+  useDeleteRegistrationMutation,
 } from './api/registrationApi'
 export {
   useLoginMutation,

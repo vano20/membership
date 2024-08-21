@@ -78,6 +78,22 @@ const registrationApi = createApi({
           })
         }
       ),
+      deleteRegistration: builder.mutation({
+        invalidatesTags: () => ['Registrations'],
+        query: ({ token, id }) => {
+          return {
+            url: `/${id}`,
+            method: 'DELETE',
+            headers: {
+              Authorization: token
+            }
+          }
+        },
+        transformResponse: response =>
+          response.data,
+        transformErrorResponse: response =>
+          response.data?.errors
+      }),
       fetchRegistrationDetail: builder.query({
         providesTags: () => ['Registrations'],
         transformResponse: response =>
@@ -183,6 +199,7 @@ export const {
   useUpdateRegistrationsStatusMutation,
   useUpdateRegistrationsMutation,
   useFetchSummaryQuery,
-  useFetchSummaryCityQuery
+  useFetchSummaryCityQuery,
+  useDeleteRegistrationMutation,
 } = registrationApi
 export { registrationApi }

@@ -21,7 +21,7 @@ export const registrationSchema =
       .test(
         'len',
         'Telepon tidak valid',
-        val => val && val.toString().length <= 15
+        val => val && val.toString().length <= 15 && val.toString().length >= 8
       ),
     position: Yup.object().shape({
       label: Yup.string(),

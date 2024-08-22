@@ -87,7 +87,7 @@ export default function AdminPage() {
       label: 'Provinsi',
       render: item => (
         <>
-          {capitalizeWord(item.province.name)}
+          {capitalizeWord(item.province?.name || '')}
         </>
       )
     },

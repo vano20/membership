@@ -2,7 +2,8 @@ import { MdOutlineWhatsapp } from 'react-icons/md'
 import Modal from '/src/components/Modal'
 
 export default function ModalSuccess({ npwp = '', showModal, handleChange }) {
-  const wa = `https://wa.me/?text=Saya telah melakukan pendaftaran dengan nomor register ${npwp}`
+  const cpAdmin = import.meta.env.VITE_NOMOR_HP_ADMIN;
+  const wa = `https://wa.me/${cpAdmin}?text=Saya telah melakukan pendaftaran dengan nomor register ${npwp}`
 
   const onClose = () => {
     handleChange(false)
@@ -31,7 +32,7 @@ export default function ModalSuccess({ npwp = '', showModal, handleChange }) {
         <p>
           <a href={encodeURI(wa)} target="_blank" className="ml-1 text-blue-600 hover:text-blue-500/30 flex justify-center items-center">
             <MdOutlineWhatsapp size={24} className="inline mr-2" />
-            +628113000047
+            {cpAdmin}
           </a>
         </p>
       </div>

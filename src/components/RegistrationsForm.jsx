@@ -131,6 +131,14 @@ const RegistrationsForm = () => {
 
   useEffect(() => {
     if (id && detail) {
+      const province = {
+        ...(detail.province && {
+          ...detail.province,
+          value: detail.province.code,
+          label: capitalize(detail.province.name),
+        })
+      }
+
       setInitValue({
         ...initialValue,
         company_name: detail.company_name,
@@ -141,18 +149,18 @@ const RegistrationsForm = () => {
         company_address: detail.company_address,
         npwp: detail.npwp,
         qualification: qualifications.find(({ value }) => value.toUpperCase() === detail.qualification.toUpperCase()),
-        province: {
-          ...detail.province,
-          value: detail.province.id,
-          label: capitalize(detail.province.name),
-        },
+        province,
         city: {
-          ...detail.city,
-          value: detail.city.id,
-          label: capitalize(detail.city.name),
+          ...detail.city && {
+            ...detail.city,
+            value: detail.city.code,
+            label: capitalize(detail.city.name),
+          }
         },
         company_type: types.find(({ value }) => value === detail.company_type),
       })
+
+      setProv(province)
     }
   }, [detail, id])
 
@@ -202,6 +210,7 @@ const RegistrationsForm = () => {
       company_type,
       ...rest
     } = values
+
     const body = {
       ...rest,
       ...(id && { id, token: isLoggedIn }),

@@ -33,7 +33,7 @@ const dataQualifications = [
 ]
 const dataPositions = [
   'direktur',
-  'diretur utama',
+  'direktur utama',
   'wakil direktur'
 ]
 const dataType = ['PT', 'CV', 'Koperasi']

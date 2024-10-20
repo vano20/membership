@@ -307,7 +307,7 @@ export default function AdminPage() {
             <span className="font-semibold">
               NPWP
             </span>
-            {detail?.phone_number}
+            {detail?.npwp}
           </div>
         </div>
         <div className="p-2 text-lg my-4">

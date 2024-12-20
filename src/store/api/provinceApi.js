@@ -15,6 +15,8 @@ const provinceApi = createApi({
     return {
       fetchProvinces: builder.query({
         providesTags: result => {
+          if (!result || !Array.isArray(result)) return [];
+
           return result.map(prov => ({
             type: 'Province',
             id: prov.id

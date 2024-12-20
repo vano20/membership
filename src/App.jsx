@@ -31,7 +31,7 @@ const AdminRoutes = ({ children }) => {
   return children
 }
 
-const router = createHashRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: (

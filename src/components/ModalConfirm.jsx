@@ -29,7 +29,7 @@ export default function ModalSuccess({ showModal, title = '', desc = '', submitT
 
   const modal = (
     <Modal onClose={onClose} footer={footer}>
-      <div className="flex flex-col items-start gap-4 text-wrap break-words">
+      <div className="md:p-0 py-4 flex flex-col items-start gap-4 text-wrap break-words">
         <h1 className="text-3xl font-semibold">
           {title}
         </h1>

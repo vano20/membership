@@ -276,7 +276,7 @@ export default function AdminPage() {
 
   const modal = (
     <Modal onClose={handleClose} footer={footer}>
-      <div className="text-wrap break-words">
+      <div className="md:p-0 text-wrap break-words py-4">
         <h1 className="text-3xl font-semibold flex items-start gap-4 mb-2">
           {detail?.company_name}{' '}
           <div className="inline-block text-sm ml-auto">

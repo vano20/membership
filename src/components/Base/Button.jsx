@@ -6,7 +6,8 @@ export function Button({
   isDisabled,
   isLoading,
   rounded,
-  fullRounded
+  fullRounded,
+  fullWidth
 }) {
   const variantMapping = {
     primary: 'text-white active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500',
@@ -16,12 +17,13 @@ export function Button({
   const roundedClass = rounded ? 'rounded-lg' : ''
   const fullRoundedClass = fullRounded ? 'rounded-full' : ''
   const variantClass = variantMapping[variant] ?? ''
+  const fullWidthClass = fullWidth ? 'w-full' : ''
 
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`py-1 px-3 disabled:opacity-75 disabled:text-slate-400 ${roundedClass} ${fullRoundedClass} ${variantClass}`}
+      className={`py-1 px-3 disabled:opacity-75 disabled:text-slate-400 ${roundedClass} ${fullRoundedClass} ${variantClass} ${fullWidthClass}`}
       disabled={isDisabled || isLoading}
     >
       {children}

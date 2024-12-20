@@ -108,19 +108,21 @@ export default function RegistryPage() {
     }, [data, npwp])
 
   return (
-    <div className="w-screen md:min-h-screen overflow-auto w-full bg-white p-8">
+    <div className="md:w-screen min-h-screen overflow-auto w-full bg-white p-8">
       <div className="w-full bg-slate-200 p-8 rounded-md border-slate-500 shadow-lg shadow-slate-300">
-        <div className="flex md:flex-row md:justify-between flex-col gap-4 mb-4">
+        <div className="flex md:flex-row md:justify-between md:items-center flex-col gap-4 mb-4">
           <h2 className="text-2xl font-semibold capitalize mb-4 text-gray-700">
             Cek proses pendaftaran
           </h2>
-          <Link
-            as="a"
-            to="/"
-            className="text-md ml-1 text-blue-600 hover:text-blue-500/30"
-          >
-            Kembali
-          </Link>
+          <div>
+            <Link
+              as="a"
+              to="/"
+              className="text-md ml-1 text-blue-600 hover:text-blue-500/30"
+            >
+              Kembali
+            </Link>
+          </div>
         </div>
         <div className="flex justify-between gap-2 mb-6">
           <input

@@ -339,15 +339,17 @@ export default function AdminPage() {
   return (
     <>
       <div className="flex flex-col w-full h-full bg-slate-200 border-2 rounded-md shadow-lg shadow-slate-300 mx-auto p-8 border-transparent">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+          <h2 className="md:mb-0 text-4xl font-semibold mb-4">
             Approval
           </h2>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
             <FilterAdminTable onClickSearch={handleUpdateFilter} onPressEnter={handleUpdateFilter} />
 
-            <LogoutButton />
+            <div className="flex">
+              <LogoutButton />
+            </div>
           </div>
         </div>
 

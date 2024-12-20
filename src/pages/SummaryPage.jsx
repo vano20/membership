@@ -206,7 +206,7 @@ export default function AdminPage() {
       <div className="flex flex-col w-screen min-h-screen items-center overflow-auto bg-white pb-8">
         <div className="flex flex-col w-full h-full bg-slate-200 border-2 rounded-md shadow-lg shadow-slate-300 mx-auto p-8 border-transparent">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">
+            <h2 className="text-4xl font-semibold">
               List Rekapitulasi
             </h2>
 

@@ -72,8 +72,8 @@ export default function LoginForm() {
                   }
                 />
               </div>
-              <div className="mt-8 flex justify-end">
-                <Button type="submit" rounded isDisabled={isSubmitting || isLoading}>Login</Button>
+              <div className="mt-8 md:justify-end w-full">
+                <Button type="submit" rounded isDisabled={isSubmitting || isLoading} fullWidth>Login</Button>
               </div>
             </div>
           </Form>

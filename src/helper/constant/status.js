@@ -15,5 +15,3 @@ export const mappingStatusColor = {
   [mappingStatus.approved]: 'green',
   [mappingStatus.rejected]: 'red'
 }
-
-export const ENTER_CODE = 13

@@ -1,8 +1,8 @@
 import {
   mappingStatusColor,
   mappingStatusText
-} from '/src/pages/constant'
-import { Badge } from './Badge'
+} from '/src/helper/constant/status'
+import { Badge } from './Base/Badge'
 
 export default function StatusBadge({ status }) {
   return (

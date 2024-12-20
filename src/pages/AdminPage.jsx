@@ -14,8 +14,8 @@ import { useAuth } from '/src/context/useAuth'
 import Modal from '/src/components/Modal'
 import { useUpdateRegistrationsStatusMutation, useDeleteRegistrationMutation, useFetchListRegistrationQuery, useFetchRegistrationQuery } from '/src/store'
 import { Link } from 'react-router-dom'
-import FilterAdminTable from '../components/FilterAdminTable'
-import { mappingStatus } from './constant'
+import FilterAdminTable from '/src/components/FilterAdminTable'
+import { mappingStatus } from '/src/helper/constant/status'
 
 const INITIAL_META = {
   page: 1,

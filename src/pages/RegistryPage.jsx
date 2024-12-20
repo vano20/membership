@@ -8,7 +8,8 @@ import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import StatusBadge from '/src/components/StatusBadge'
-import { ENTER_CODE, mappingStatus } from './constant'
+import { mappingStatus } from '/src/helper/constant/status'
+import { ENTER_CODE } from '/src/helper/constant/key-code'
 
 export default function RegistryPage() {
   const [npwp, setNpwp] = useState('')

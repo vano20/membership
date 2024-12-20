@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 import Select from 'react-tailwindcss-select'
-import { ENTER_CODE } from "../pages/constant"
+import { ENTER_CODE } from '/src/helper/constant/key-code'
 import {
   useFetchProvincesQuery,
 } from '/src/store'

@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom'
 import StatusBadge from '/src/components/StatusBadge'
 import { mappingStatus } from '/src/helper/constant/status'
 import { ENTER_CODE } from '/src/helper/constant/key-code'
+import { Button } from '../components/Base/Button'
 
 export default function RegistryPage() {
   const [npwp, setNpwp] = useState('')
@@ -131,12 +132,12 @@ export default function RegistryPage() {
               setTerm(e.target.value)
             }
           />
-          <button
-            className="py-1 px-3 text-white rounded active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30"
+          <Button
             onClick={handleSearch}
+            rounded
           >
             Search
-          </button>
+          </Button>
         </div>
 
         <div>

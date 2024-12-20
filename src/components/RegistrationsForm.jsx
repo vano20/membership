@@ -24,6 +24,7 @@ import {
   useFetchRegistrationDetailQuery,
 } from '/src/store'
 import { useAuth } from '/src/context/useAuth'
+import { Button } from './Base/Button'
 
 const dataQualifications = [
   'kecil',
@@ -503,17 +504,15 @@ const RegistrationsForm = () => {
                   </div> */}
             </div>
             <div className="mt-8 flex justify-end">
-              <button
+              <Button
                 type="submit"
-                className={`py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 disabled:bg-slate-400 border-transparent`}
-                disabled={
-                  isPageLoading || isSubmitting
-                }
+                rounded
+                isDisabled={isPageLoading || isSubmitting}
               >
                 {isPageLoading
                   ? 'Loading..'
                   : 'Submit'}
-              </button>
+              </Button>
             </div>
           </Form>
         )}

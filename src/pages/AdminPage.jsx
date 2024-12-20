@@ -16,6 +16,7 @@ import { useUpdateRegistrationsStatusMutation, useDeleteRegistrationMutation, us
 import { Link } from 'react-router-dom'
 import FilterAdminTable from '/src/components/FilterAdminTable'
 import { mappingStatus } from '/src/helper/constant/status'
+import { Button } from '../components/Base/Button'
 
 const INITIAL_META = {
   page: 1,
@@ -123,19 +124,20 @@ export default function AdminPage() {
           >
             Edit
           </Link>
-          <button
-            className="py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/10 hover:text-blue-500"
+          <Button
+            rounded
             onClick={() => handleShowModal(item)}
           >
             Approve
-          </button>
-          <button
-            className="py-1 px-3 text-white rounded-lg active:bg-red-500/50 bg-red-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-red-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-red-500/10 hover:text-red-500 disabled:bg-red-500/20 disabled:text-slate-400"
-            disabled={isLoadingDelete}
+          </Button>
+          <Button
+            rounded
+            variant="danger"
+            isDisabled={isLoadingDelete}
             onClick={() => handleShowModalConfirm(item)}
           >
             Delete
-          </button>
+          </Button>
         </div>
       )
     }
@@ -243,29 +245,32 @@ export default function AdminPage() {
 
   const footer = (
     <div className="flex gap-4">
-      <button
+      <Button
+        variant="secondary"
+        rounded
+        isDisabled={isLoading}
         onClick={handleClose}
-        className="py-1 px-3 text-slate rounded-lg active:bg-slate-500/50 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-slate-500/10 hover:text-slate-500 disabled:bg-blue-500/20 disabled:text-slate-400"
-        disabled={isLoading}
       >
         Cancel
-      </button>
+      </Button>
 
-      <button
+      <Button
+        rounded
+        isDisabled={isLoading}
         onClick={() => handleSubmit()}
-        className="py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:bg-blue-500/20 disabled:text-slate-400"
-        disabled={isLoading}
       >
         Save
-      </button>
+      </Button>
 
-      {detail?.status === mappingStatus.pending && <button
-        onClick={() => handleSubmit(mappingStatus.approved)}
-        className="py-1 px-3 text-white rounded-lg active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:bg-blue-500/20 disabled:text-slate-400"
-        disabled={isLoading}
-      >
-        Approve
-      </button>}
+      {detail?.status === mappingStatus.pending &&
+        <Button
+          rounded
+          isDisabled={isLoading}
+          onClick={() => handleSubmit(mappingStatus.approved)}
+        >
+          Approve
+        </Button>
+      }
     </div>
   )
 

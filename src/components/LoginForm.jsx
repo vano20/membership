@@ -73,7 +73,7 @@ export default function LoginForm() {
                 />
               </div>
               <div className="mt-8 flex justify-end">
-                <Button type="submit" variant="primary" rounded disabled={isSubmitting || isLoading}>Login</Button>
+                <Button type="submit" rounded isDisabled={isSubmitting || isLoading}>Login</Button>
               </div>
             </div>
           </Form>

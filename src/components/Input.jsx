@@ -34,15 +34,13 @@ function Input({
         <Field
           name={name}
           type={theType}
-          className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 focus:shadow-md focus:shadow-blue-500/30 border border-slate-300 rounded-md py-1 px-2 w-full h-10 placeholder:text-sm ${
-            isInvalid
+          className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 focus:shadow-md focus:shadow-blue-500/30 border border-slate-300 rounded-md py-1 px-2 w-full h-10 placeholder:text-sm ${isInvalid
               ? 'border-red-600/50 shadow-md shadow-red-600/30'
               : ''
-          } ${
-            type === 'number'
+            } ${type === 'number'
               ? '[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none '
               : ''
-          }`}
+            }`}
           {...props}
         />
         {type === 'password' && (

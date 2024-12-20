@@ -5,6 +5,7 @@ import { useLoginMutation } from '/src/store'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '/src/context//useAuth'
 import toast from 'react-hot-toast'
+import { Button } from './Base/Button'
 
 export default function LoginForm() {
   const { handleIsLogin } = useAuth()
@@ -72,15 +73,7 @@ export default function LoginForm() {
                 />
               </div>
               <div className="mt-8 flex justify-end">
-                <button
-                  type="submit"
-                  className="py-1 px-3 text-white rounded active:bg-blue-500/50 bg-blue-500 disabled:opacity-75"
-                  disabled={
-                    isSubmitting || isLoading
-                  }
-                >
-                  Login
-                </button>
+                <Button type="submit" rounded isDisabled={isSubmitting || isLoading}>Login</Button>
               </div>
             </div>
           </Form>

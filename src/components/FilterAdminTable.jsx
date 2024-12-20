@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useState } from 'react'
 import Select from 'react-tailwindcss-select'
-import { ENTER_CODE } from "../pages/constant"
+import { ENTER_CODE } from '/src/helper/constant/key-code'
 import {
   useFetchProvincesQuery,
 } from '/src/store'
 import { useMemo } from "react";
+import { Button } from './Base/Button';
 
 const currentYear = new Date().getFullYear()
 const lengthPeriods = currentYear - 2024
@@ -82,12 +83,7 @@ export default function FilterAdminTable({ onClickSearch, onPressEnter }) {
         }
       />
 
-      <button
-        className="py-1 px-3 text-white rounded active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 rounded-lg"
-        onClick={handleSearch}
-      >
-        Search
-      </button>
+      <Button rounded onClick={handleSearch}>Search</Button>
     </>
   )
 }

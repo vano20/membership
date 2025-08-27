@@ -1,26 +1,22 @@
-import { Link } from 'react-router-dom'
-import RegistrationsForm from '/src/components/RegistrationsForm'
-import { logoGakindo } from '../helper/assets'
+import { Link } from "react-router-dom";
+import RegistrationsForm from "/src/components/RegistrationsForm";
+import { logoGakindo } from "../helper/assets";
 
 export default function MembershipPage() {
   return (
     <>
-      <div className="flex w-screen min-h-screen overflow-auto justify-center items-center bg-white">
-        <div className="flex flex-col md:w-1/3 w-full h-full bg-slate-200 border-2 rounded-3xl border-transparent px-10 pt-10 pb-5 shadow-lg shadow-slate-300 max-h-screen overflow-auto">
+      <div className="flex w-screen overflow-auto justify-center items-center bg-white">
+        <div className="flex flex-col md:w-1/3 px-10 py-4 min-h-dvh bg-slate-200 border-2 rounded-xl border-transparent shadow-lg shadow-slate-300">
           <div className="flex md:justify-between justify-center items-center mb-8">
             <h2 className="text-4xl text-slate-700 font-semibold hidden md:block">
               Registrasi
             </h2>
-            <img
-              src={logoGakindo}
-              width="200px"
-              className="rounded-md"
-            />
+            <img src={logoGakindo} width="200px" className="rounded-md" />
           </div>
 
           <RegistrationsForm />
 
-          <div className="text-center mt-2 mb-0">
+          <div className="text-center mt-4 mb-0">
             Sudah mendaftar?
             <Link
               as="a"
@@ -33,5 +29,5 @@ export default function MembershipPage() {
         </div>
       </div>
     </>
-  )
+  );
 }

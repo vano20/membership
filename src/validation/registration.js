@@ -12,7 +12,7 @@ export const registrationSchema =
       'Masukkan nama perusahaan'
     ),
     contact_person: Yup.string().required(
-      'Masukkan nama penanggung jawab'
+      'Masukkan nama PJ'
     ),
     phone_number: Yup.string(
       'Telepon tidak valid'

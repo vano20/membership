@@ -6,22 +6,22 @@ import {
   MdPhoneAndroid,
 } from "react-icons/md";
 import toast from "react-hot-toast";
-import LogoutButton from "/src/components/LogoutButton";
-import StatusBadge from "/src/components/StatusBadge";
-import Table from "/src/components/Table";
-import ModalConfirm from "/src/components/ModalConfirm";
-import { useAuth } from "/src/context/useAuth";
-import Modal from "/src/components/Modal";
+import LogoutButton from "@/components/LogoutButton";
+import StatusBadge from "@/components/StatusBadge";
+import Table from "@/components/Table";
+import ModalConfirm from "@/components/ModalConfirm";
+import { useAuth } from "@/context/useAuth";
+import Modal from "@/components/Modal";
 import {
   useUpdateRegistrationsStatusMutation,
   useDeleteRegistrationMutation,
   useFetchListRegistrationQuery,
   useFetchRegistrationQuery,
-} from "/src/store";
+} from "@/store";
 import { Link } from "react-router-dom";
-import FilterAdminTable from "/src/components/FilterAdminTable";
-import { mappingStatus } from "/src/helper/constant/status";
-import { Button } from "../components/Base/Button";
+import FilterAdminTable from "@/components/FilterAdminTable";
+import { mappingStatus } from "@/helper/constant/status";
+import { Button } from "@/components/Base/Button";
 
 const INITIAL_META = {
   page: 1,

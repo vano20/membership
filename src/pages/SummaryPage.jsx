@@ -5,17 +5,17 @@ import {
   MdPhoneAndroid
 } from 'react-icons/md'
 import toast from 'react-hot-toast'
-// import LogoutButton from '/src/components/LogoutButton'
-import StatusBadge from '/src/components/StatusBadge'
-import Table from '/src/components/Table'
-import Modal from '/src/components/Modal'
-import { useAuth } from '/src/context/useAuth'
-import { useFetchListRegistrationQuery } from '/src/store/api/registrationApi'
-import { useUpdateRegistrationsStatusMutation } from '/src/store'
-import { useFetchRegistrationQuery } from '/src/store/api/registrationApi'
+// import LogoutButton from '@/components/LogoutButton'
+import StatusBadge from '@/components/StatusBadge'
+import Table from '@/components/Table'
+import Modal from '@/components/Modal'
+import { useAuth } from '@/context/useAuth'
+import { useFetchListRegistrationQuery } from '@/store/api/registrationApi'
+import { useUpdateRegistrationsStatusMutation } from '@/store'
+import { useFetchRegistrationQuery } from '@/store/api/registrationApi'
 // import { Link } from 'react-router-dom'
-import FilterAdminTable from '../components/FilterAdminTable'
-import { capitalizeWord } from '../helper/string'
+import FilterAdminTable from '@/components/FilterAdminTable'
+import { capitalizeWord } from '@/helper/string'
 
 const INITIAL_META = {
   page: 1,

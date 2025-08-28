@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import Table from "/src/components/Table";
-import { useFetchRegistrationQuery } from "/src/store/api/registrationApi";
+import Table from "@/components/Table";
+import { useFetchRegistrationQuery } from "@/store/api/registrationApi";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import StatusBadge from "/src/components/StatusBadge";
-import { mappingStatus } from "/src/helper/constant/status";
-import { ENTER_CODE } from "/src/helper/constant/key-code";
-import { Button } from "../components/Base/Button";
+import StatusBadge from "@/components/StatusBadge";
+import { mappingStatus } from "@/helper/constant/status";
+import { ENTER_CODE } from "@/helper/constant/key-code";
+import { Button } from "@/components/Base/Button";
 
 export default function RegistryPage() {
   const [npwp, setNpwp] = useState("");

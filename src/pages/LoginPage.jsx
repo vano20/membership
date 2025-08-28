@@ -1,5 +1,5 @@
-import { logoGakindo } from "../helper/assets";
-import LoginForm from "/src/components/LoginForm";
+import { logoGakindo } from "@/helper/assets";
+import LoginForm from "@/components/LoginForm";
 
 export default function LoginPage() {
   return (

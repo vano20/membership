@@ -1,11 +1,11 @@
 import { Form, Formik } from "formik";
-import Input from "/src/components/Input";
-import { useLoginMutation } from "/src/store";
+import Input from "@/components/Input";
+import { useLoginMutation } from "@/store";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "/src/context//useAuth";
+import { useAuth } from "@/context/useAuth";
 import toast from "react-hot-toast";
-import { Button } from "./Base/Button";
-import { loginSchema } from "../validation/login";
+import { Button } from "@/components/Base/Button";
+import { loginSchema } from "@/validation/login";
 
 export default function LoginForm() {
   const { handleIsLogin } = useAuth();

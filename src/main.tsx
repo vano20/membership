@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import App from '@/App.tsx'
 import { Provider } from 'react-redux'
-import { store } from './store/index.js'
-import './index.css'
+import { store } from '@/store/index.js'
+import '@/index.css'
 import * as Sentry from "@sentry/react";
 
 Sentry.init({

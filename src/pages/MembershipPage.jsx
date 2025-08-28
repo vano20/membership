@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import RegistrationsForm from "/src/components/RegistrationsForm";
-import { logoGakindo } from "../helper/assets";
+import RegistrationsForm from "@/components/RegistrationsForm";
+import { logoGakindo } from "@/helper/assets";
 
 export default function MembershipPage() {
   return (
@@ -45,7 +45,7 @@ export default function MembershipPage() {
           </div>
         </div>
 
-        {/*
+        {/* 
         OPTIONAL: sticky helper bar for long forms (mobile friendly).
         Move your form's Submit here if needed, or render a <FormActions /> slot.
         <div className="sticky bottom-0 left-0 right-0 mt-4

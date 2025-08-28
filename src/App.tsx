@@ -4,19 +4,19 @@ import {
   RouterProvider,
   createHashRouter
 } from 'react-router-dom'
-import LoginPage from './pages/LoginPage'
-import MembershipPage from './pages/MembershipPage'
-import GuestRoot from './pages/GuestRoot'
-import RegistryPage from './pages/RegistryPage'
+import LoginPage from '@/pages/LoginPage'
+import MembershipPage from '@/pages/MembershipPage'
+import GuestRoot from '@/pages/GuestRoot'
+import RegistryPage from '@/pages/RegistryPage'
 import { Toaster } from 'react-hot-toast'
 import {
   AuthProvider,
   useAuth
-} from './context/useAuth.jsx'
-import AdminPage from './pages/AdminPage.jsx'
-import AdminRoot from './pages/AdminRoot.jsx'
-import SummaryPage from './pages/SummaryPage.jsx'
-import AdminEditPage from './pages/AdminEditPage.jsx'
+} from '@/context/useAuth.jsx'
+import AdminPage from '@/pages/AdminPage.jsx'
+import AdminRoot from '@/pages/AdminRoot.jsx'
+import SummaryPage from '@/pages/SummaryPage.jsx'
+import AdminEditPage from '@/pages/AdminEditPage.jsx'
 import { ReactNode } from 'react'
 
 interface GuestRoutesProps {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Select from "react-tailwindcss-select";
-import { ENTER_CODE } from "/src/helper/constant/key-code";
-import { useFetchProvincesQuery } from "/src/store";
+import { ENTER_CODE } from "@/helper/constant/key-code";
+import { useFetchProvincesQuery } from "@/store";
 import { useMemo } from "react";
 import { Button } from "./Base/Button";
 

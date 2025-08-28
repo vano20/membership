@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import RegistrationsForm from "/src/components/RegistrationsForm";
+import RegistrationsForm from "@/components/RegistrationsForm";
 
 export default function AdminEditPage() {
   return (

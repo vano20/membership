@@ -1,21 +1,21 @@
-import Input from "./Input";
+import Input from "@/components/Input";
 import { useEffect, useMemo, useState } from "react";
 import Select from "react-tailwindcss-select";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
-import ModalSuccess from "./ModalSuccess";
+import ModalSuccess from "@/components/ModalSuccess";
 import { useParams } from "react-router-dom";
-import { capitalize } from "../helper/string";
-import { registrationSchema } from "../validation/registration";
+import { capitalize } from "@/helper/string";
+import { registrationSchema } from "@/validation/registration";
 import {
   useAddRegistrationsMutation,
   useUpdateRegistrationsMutation,
   useFetchCitiesQuery,
   useFetchProvincesQuery,
   useFetchRegistrationDetailQuery,
-} from "/src/store";
-import { useAuth } from "/src/context/useAuth";
-import { Button } from "./Base/Button";
+} from "@/store";
+import { useAuth } from "@/context/useAuth";
+import { Button } from "@/components/Base/Button";
 
 const dataQualifications = ["kecil", "menengah", "besar", "spesialis"];
 const dataPositions = ["direktur", "direktur utama", "wakil direktur"];

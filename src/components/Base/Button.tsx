@@ -1,4 +1,4 @@
-import { ButtonProps, Variant } from "../../types/button";
+import { ButtonProps, VariantButton } from "../../types/button";
 
 export function Button({
   children,
@@ -11,7 +11,7 @@ export function Button({
   fullRounded,
   fullWidth,
 }: ButtonProps): JSX.Element {
-  const variantMapping: Record<Variant, string> = {
+  const variantMapping: Record<VariantButton, string> = {
     primary:
       "text-white bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-600",
     secondary:

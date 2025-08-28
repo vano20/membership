@@ -1,5 +1,6 @@
 import {
   Navigate,
+  RouteObject,
   RouterProvider,
   createHashRouter
 } from 'react-router-dom'
@@ -16,22 +17,31 @@ import AdminPage from './pages/AdminPage.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import SummaryPage from './pages/SummaryPage.jsx'
 import AdminEditPage from './pages/AdminEditPage.jsx'
+import { ReactNode } from 'react'
 
-const GuestRoutes = ({ children }) => {
+interface GuestRoutesProps {
+  children: ReactNode;
+}
+
+const GuestRoutes = ({ children }: GuestRoutesProps) => {
   const { isLoggedIn } = useAuth()
   if (isLoggedIn)
     return <Navigate to="/admin" replace />
   return children
 }
 
-const AdminRoutes = ({ children }) => {
+interface AdminRoutesProps {
+  children: ReactNode;
+}
+
+const AdminRoutes = ({ children }: AdminRoutesProps) => {
   const { isLoggedIn } = useAuth()
   if (!isLoggedIn)
     return <Navigate to="/" replace />
   return children
 }
 
-const router = createHashRouter([
+const routes: RouteObject[] = [
   {
     path: '/',
     element: (
@@ -80,7 +90,9 @@ const router = createHashRouter([
       },
     ]
   }
-])
+]
+
+const router = createHashRouter(routes)
 
 function App() {
   return (

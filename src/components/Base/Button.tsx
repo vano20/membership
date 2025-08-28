@@ -1,15 +1,17 @@
+import { ButtonProps } from "../../types/button";
+
 export function Button({
   children,
   onClick,
   variant = "primary",
-  type = "button",
+  type,
   isDisabled,
   isLoading,
   rounded,
   fullRounded,
   fullWidth,
-}) {
-  const variantMapping = {
+}: ButtonProps): JSX.Element {
+  const variantMapping: Record<string, string> = {
     primary:
       "text-white bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-600",
     secondary:
@@ -25,7 +27,7 @@ export function Button({
 
   return (
     <button
-      type={type}
+      type={type || "button"}
       onClick={onClick}
       className={`py-2 px-4 disabled:opacity-75 disabled:text-slate-400 ${roundedClass} ${fullRoundedClass} ${variantClass} ${fullWidthClass} ${isLoadingClass}`}
       disabled={isDisabled}

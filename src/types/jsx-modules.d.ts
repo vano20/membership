@@ -39,17 +39,11 @@ declare module './pages/SummaryPage.jsx' {
   const SummaryPage: ComponentType<{}>;
   export default SummaryPage;
 }
-
-declare module './pages/AdminEditPage.jsx' {
-  import { ComponentType } from 'react';
-  const AdminEditPage: ComponentType<{}>;
-  export default AdminEditPage;
-}
-
 declare module './context/useAuth.jsx' {
   import { ComponentType } from 'react';
   export const useAuth: () => {
     isLoggedIn: boolean;
+    accessToken: string | null;
     handleIsLogin: (token: string | null) => void;
     logout: () => void;
   };

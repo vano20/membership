@@ -5,12 +5,12 @@ import { useLogoutMutation } from "@/store";
 
 export default function LogoutButton() {
   const [logoutApi] = useLogoutMutation();
-  const { isLoggedIn, logout } = useAuth();
+  const { accessToken, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await logoutApi(isLoggedIn);
+      await logoutApi(accessToken);
       toast.success("Logout berhasil!");
       logout();
       navigate("/");

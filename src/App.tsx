@@ -16,7 +16,7 @@ import {
 import AdminPage from '@/pages/AdminPage.jsx'
 import AdminRoot from '@/pages/AdminRoot.jsx'
 import SummaryPage from '@/pages/SummaryPage.jsx'
-import AdminEditPage from '@/pages/AdminEditPage.jsx'
+import AdminEditPage from '@/pages/AdminEditPage'
 import { ReactNode } from 'react'
 
 interface GuestRoutesProps {

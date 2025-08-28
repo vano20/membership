@@ -2,7 +2,7 @@ import {
   createApi,
   fetchBaseQuery
 } from '@reduxjs/toolkit/query/react'
-import { capitalize } from '/src/helper/string'
+import { capitalize } from '@/helper/string'
 
 const provinceApi = createApi({
   reducerPath: 'provinces',

@@ -1,4 +1,4 @@
-import { BadgeProps, VariantBadge } from "src/types/badge";
+import { BadgeProps, VariantBadge } from "@/types/badge";
 
 export function Badge({ label, children, variant }: BadgeProps): JSX.Element {
   const mapping: Record<VariantBadge, string> = {

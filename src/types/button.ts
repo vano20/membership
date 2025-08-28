@@ -1,7 +1,7 @@
 
 export type VariantButton = "primary" | "secondary" | "danger";
 
-export type ButtonProps = {
+export interface ButtonProps {
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   variant?: VariantButton;
@@ -11,4 +11,4 @@ export type ButtonProps = {
   rounded?: boolean;
   fullRounded?: boolean;
   fullWidth?: boolean;
-};
+}

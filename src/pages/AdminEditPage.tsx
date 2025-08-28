@@ -12,7 +12,6 @@ export default function AdminEditPage() {
             </h2>
 
             <Link
-              as="a"
               to="/admin/"
               className="ml-1 text-blue-600 hover:text-blue-700"
             >

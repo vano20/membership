@@ -1,12 +1,19 @@
 import Input from "@/components/Input";
 import { useEffect, useMemo, useState } from "react";
 import Select from "react-tailwindcss-select";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import {
+  ErrorMessage,
+  Field,
+  FieldInputProps,
+  Form,
+  Formik,
+  FormikHelpers,
+} from "formik";
 import toast from "react-hot-toast";
 import ModalSuccess from "@/components/ModalSuccess";
 import { useParams } from "react-router-dom";
 import { capitalize } from "@/helper/string";
-import { registrationSchema } from "@/validation/registration.ts";
+import { registrationSchema } from "@/validation/registration";
 import {
   useAddRegistrationsMutation,
   useUpdateRegistrationsMutation,
@@ -16,12 +23,20 @@ import {
 } from "@/store";
 import { useAuth } from "@/context/useAuth";
 import { Button } from "@/components/Base/Button";
+import {
+  Option,
+  SelectValue,
+} from "react-tailwindcss-select/dist/components/type";
+import {
+  AddRegistrationBody,
+  RegistrationFormValues,
+} from "@/types/registration";
 
 const dataQualifications = ["kecil", "menengah", "besar", "spesialis"];
 const dataPositions = ["direktur", "direktur utama", "wakil direktur"];
 const dataType = ["PT", "CV", "Koperasi"];
 
-const initialValue = {
+const initialValue: RegistrationFormValues = {
   company_type: null,
   company_name: "",
   contact_person: "",
@@ -35,7 +50,7 @@ const initialValue = {
   city: null,
 };
 
-const selectClass = (field) => ({
+const selectClass = (field: FieldInputProps<string>) => ({
   menuButton: () =>
     `${
       field.value ? "text-gray-500" : "text-gray-400"
@@ -43,12 +58,12 @@ const selectClass = (field) => ({
 });
 
 const mapSelectOptions = (
-  arr,
-  callback = (item) => ({
+  arr: string[],
+  callback: (item: string) => Option = (item) => ({
     label: capitalize(item),
     value: item.toUpperCase(),
   })
-) => arr.map(callback);
+): Option[] => arr.map(callback);
 
 const qualifications = mapSelectOptions(dataQualifications);
 const positions = mapSelectOptions(dataPositions);
@@ -58,18 +73,19 @@ const types = mapSelectOptions(dataType, (i) => ({
 }));
 
 const RegistrationsForm = () => {
-  const { id } = useParams();
-  const { isLoggedIn } = useAuth();
+  const { id } = useParams<{ id?: string }>();
+  const { accessToken } = useAuth();
 
-  const [prov, setProv] = useState(null);
+  const [prov, setProv] = useState<Option | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [registeredNpwp, setRegisteredNpwp] = useState("");
-  const [initValue, setInitValue] = useState(initialValue);
+  const [initValue, setInitValue] =
+    useState<RegistrationFormValues>(initialValue);
 
   const { data: provinces, isFetching } = useFetchProvincesQuery();
 
   const { data: cities, isFetching: isFetchingCities } = useFetchCitiesQuery(
-    prov,
+    prov?.value,
     {
       skip: !prov,
     }
@@ -95,25 +111,26 @@ const RegistrationsForm = () => {
     },
   ] = useUpdateRegistrationsMutation();
 
-  const [isPageLoading] = useMemo(() => {
-    return [
+  const [isPageLoading] = useMemo(
+    () => [
       isLoading ||
         isFetching ||
         isFetchingDetail ||
         isLoadingUpdate ||
         status === "pending",
-    ];
-  }, [isLoading, isLoadingUpdate, isFetching, isFetchingDetail, status]);
+    ],
+    [isLoading, isLoadingUpdate, isFetching, isFetchingDetail, status]
+  );
 
   useEffect(() => {
     if (id && detail) {
-      const province = {
-        ...(detail.province && {
-          ...detail.province,
-          value: detail.province.code,
-          label: capitalize(detail.province.name),
-        }),
-      };
+      const province = detail.province
+        ? {
+            ...detail.province,
+            value: detail.province.code,
+            label: capitalize(detail.province.name),
+          }
+        : null;
 
       setInitValue({
         ...initialValue,
@@ -121,24 +138,27 @@ const RegistrationsForm = () => {
         contact_person: detail.contact_person,
         email: detail.email,
         phone_number: detail.phone_number,
-        position: positions.find(
-          ({ value }) => value.toUpperCase() === detail.position.toUpperCase()
-        ),
+        position:
+          positions.find(
+            ({ value }) => value.toUpperCase() === detail.position.toUpperCase()
+          ) || null,
         company_address: detail.company_address,
         npwp: detail.npwp,
-        qualification: qualifications.find(
-          ({ value }) =>
-            value.toUpperCase() === detail.qualification.toUpperCase()
-        ),
+        qualification:
+          qualifications.find(
+            ({ value }) =>
+              value.toUpperCase() === detail.qualification.toUpperCase()
+          ) || null,
         province,
-        city: {
-          ...(detail.city && {
-            ...detail.city,
-            value: detail.city.code,
-            label: capitalize(detail.city.name),
-          }),
-        },
-        company_type: types.find(({ value }) => value === detail.company_type),
+        city: detail.city
+          ? {
+              ...detail.city,
+              value: detail.city.code,
+              label: capitalize(detail.city.name),
+            }
+          : null,
+        company_type:
+          types.find(({ value }) => value === detail.company_type) || null,
       });
 
       setProv(province);
@@ -148,7 +168,7 @@ const RegistrationsForm = () => {
   useEffect(() => {
     let message = "";
     if (isError) {
-      const [firstError] = error?.npwp ?? [];
+      const [firstError] = (error as any)?.data?.npwp ?? [];
       toast.error(firstError || "Terjadi kesalahan, silahkan coba lagi");
     } else if (isSuccess) {
       message =
@@ -164,7 +184,13 @@ const RegistrationsForm = () => {
     if (registeredNpwp) setShowModal(true);
   }, [registeredNpwp]);
 
-  const handleSelectProv = (value, form) => {
+  const handleSelectProv = (
+    value: Option | null,
+    form: {
+      setFieldValue: (name: string, value: any) => void;
+      setFieldTouched: (name: string, touched: boolean) => void;
+    }
+  ) => {
     const name = "province";
     form.setFieldValue(name, value);
 
@@ -175,22 +201,25 @@ const RegistrationsForm = () => {
     }
   };
 
-  const handleFormSubmit = async (values, action) => {
+  const handleFormSubmit = async (
+    values: RegistrationFormValues,
+    action: FormikHelpers<RegistrationFormValues>
+  ) => {
     const { province, city, qualification, position, company_type, ...rest } =
       values;
 
-    const body = {
+    const body: AddRegistrationBody = {
       ...rest,
-      ...(id && { id, token: isLoggedIn }),
-      province_id: city?.id,
-      qualification: qualification?.value,
-      position: position?.value,
-      company_type: company_type?.value,
-      province_code: province?.value,
+      ...(id && { id, token: accessToken }),
+      province_id: city?.value ? parseInt(city.value) : 0,
+      qualification: qualification?.value || "",
+      position: position?.value || "",
+      company_type: company_type?.value || "",
+      province_code: province?.value || "",
     };
     const submitFunc = id ? updateRegistration : addRegistration;
 
-    const result = await submitFunc(body);
+    const result: any = await submitFunc(body);
 
     setRegisteredNpwp(result?.data?.data?.npwp || "");
 
@@ -221,15 +250,23 @@ const RegistrationsForm = () => {
                       Bentuk
                     </label>
                     <Field name="company_type">
-                      {({ field, form }) => (
+                      {({
+                        field,
+                        form,
+                      }: {
+                        field: FieldInputProps<string>;
+                        form: any;
+                      }) => (
                         <Select
                           {...field}
+                          value={field.value as unknown as Option}
                           options={types}
                           placeholder="Bentuk"
                           noOptionsMessage="Data tidak ditemukan"
                           isClearable
                           classNames={selectClass(field)}
-                          onChange={(e) =>
+                          primaryColor="blue"
+                          onChange={(e: SelectValue) =>
                             form.setFieldValue("company_type", e)
                           }
                         />
@@ -248,7 +285,9 @@ const RegistrationsForm = () => {
                     <Input
                       name="company_name"
                       placeholder="Nama perusahaan"
-                      isInvalid={touched.company_name && errors.company_name}
+                      isInvalid={
+                        !!(touched.company_name && errors.company_name)
+                      }
                     />
                   </div>
                 </div>
@@ -259,7 +298,9 @@ const RegistrationsForm = () => {
                     name="contact_person"
                     label="Penanggung jawab"
                     placeholder="Nama penanggung jawab"
-                    isInvalid={touched.contact_person && errors.contact_person}
+                    isInvalid={
+                      !!(touched.contact_person && errors.contact_person)
+                    }
                   />
                 </div>
                 {/* <div>
@@ -276,15 +317,25 @@ const RegistrationsForm = () => {
                 <div className="w-full">
                   <label className="block font-semibold mb-1">Jabatan</label>
                   <Field name="position">
-                    {({ field, form }) => (
+                    {({
+                      field,
+                      form,
+                    }: {
+                      field: FieldInputProps<string>;
+                      form: any;
+                    }) => (
                       <Select
                         {...field}
+                        value={field.value as unknown as SelectValue}
                         options={positions}
                         placeholder="Pilih jabatan"
                         noOptionsMessage="Data tidak ditemukan"
                         isClearable
                         classNames={selectClass(field)}
-                        onChange={(e) => form.setFieldValue("position", e)}
+                        primaryColor="blue"
+                        onChange={(e: SelectValue) =>
+                          form.setFieldValue("position", e)
+                        }
                       />
                     )}
                   </Field>
@@ -298,16 +349,26 @@ const RegistrationsForm = () => {
               <div className="w-full">
                 <label className="block font-semibold mb-1">Kualifikasi</label>
                 <Field name="qualification">
-                  {({ field, form }) => (
+                  {({
+                    field,
+                    form,
+                  }: {
+                    field: FieldInputProps<string>;
+                    form: any;
+                  }) => (
                     <Select
                       {...field}
+                      value={field.value as unknown as SelectValue}
                       options={qualifications}
                       placeholder="Pilih kualifikasi"
                       noOptionsMessage="Data tidak ditemukan"
                       isClearable
                       isSearchable
                       classNames={selectClass(field)}
-                      onChange={(e) => form.setFieldValue("qualification", e)}
+                      primaryColor="blue"
+                      onChange={(e: SelectValue) =>
+                        form.setFieldValue("qualification", e)
+                      }
                     />
                   )}
                 </Field>
@@ -322,7 +383,7 @@ const RegistrationsForm = () => {
                   name="phone_number"
                   label="Nomor telepon"
                   placeholder="Nomor telepon"
-                  isInvalid={touched.phone_number && errors.phone_number}
+                  isInvalid={!!(touched.phone_number && errors.phone_number)}
                 />
               </div>
               <div>
@@ -331,7 +392,7 @@ const RegistrationsForm = () => {
                   name="email"
                   label="Email"
                   placeholder="Alamat email"
-                  isInvalid={touched.email && errors.email}
+                  isInvalid={!!(touched.email && errors.email)}
                 />
               </div>
               <div>
@@ -339,16 +400,23 @@ const RegistrationsForm = () => {
                   label="NPWP"
                   name="npwp"
                   placeholder="NPWP perusahaan"
-                  isInvalid={touched.npwp && errors.npwp}
+                  isInvalid={!!(touched.npwp && errors.npwp)}
                 />
               </div>
               <div>
                 <label className="block font-semibold mb-1">Alamat</label>
                 <div className="w-full mb-4">
                   <Field name="province">
-                    {({ field, form }) => (
+                    {({
+                      field,
+                      form,
+                    }: {
+                      field: FieldInputProps<string>;
+                      form: any;
+                    }) => (
                       <Select
                         {...field}
+                        value={field.value as unknown as SelectValue}
                         options={provinces || []}
                         placeholder="Pilih provinsi"
                         noOptionsMessage="Data tidak ditemukan"
@@ -357,7 +425,10 @@ const RegistrationsForm = () => {
                         isClearable
                         isSearchable
                         classNames={selectClass(field)}
-                        onChange={(e) => handleSelectProv(e, form)}
+                        primaryColor="blue"
+                        onChange={(e: SelectValue) =>
+                          handleSelectProv(e as Option, form)
+                        }
                       />
                     )}
                   </Field>
@@ -369,9 +440,16 @@ const RegistrationsForm = () => {
                 </div>
                 <div className="w-full">
                   <Field name="city">
-                    {({ field, form }) => (
+                    {({
+                      field,
+                      form,
+                    }: {
+                      field: FieldInputProps<string>;
+                      form: any;
+                    }) => (
                       <Select
                         {...field}
+                        value={field.value as unknown as SelectValue}
                         options={(prov && cities) || []}
                         placeholder="Pilih kota/kabupaten"
                         noOptionsMessage="Data tidak ditemukan"
@@ -380,7 +458,10 @@ const RegistrationsForm = () => {
                         classNames={selectClass(field)}
                         isClearable
                         isSearchable
-                        onChange={(e) => form.setFieldValue("city", e)}
+                        primaryColor="blue"
+                        onChange={(e: SelectValue) =>
+                          form.setFieldValue("city", e)
+                        }
                       />
                     )}
                   </Field>
@@ -393,7 +474,7 @@ const RegistrationsForm = () => {
               </div>
               <div className="w-full">
                 <Field name="company_address">
-                  {({ field }) => (
+                  {({ field }: { field: FieldInputProps<string> }) => (
                     <textarea
                       {...field}
                       className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 border rounded-md p-1 min-w-full focus:shadow-md focus:shadow-blue-500/30 ${
@@ -441,7 +522,7 @@ const RegistrationsForm = () => {
       <ModalSuccess
         npwp={registeredNpwp}
         showModal={showModal}
-        handleChange={(val) => setShowModal(val)}
+        handleChange={(val: boolean) => setShowModal(val)}
       />
     </>
   );

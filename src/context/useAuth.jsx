@@ -1,36 +1,34 @@
-import { createContext, useContext } from 'react'
-import { useLocalStorage } from '@/hooks/use-local-storage'
+import { createContext, useContext, useMemo } from "react";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  const [isLoggedIn, setLogin] = useLocalStorage(
-    'isLoggedIn',
-    false
-  )
+  const [accessToken, setLogin] = useLocalStorage("accessToken", null);
 
-  const handleIsLogin = token => {
-    setLogin(token)
-  }
+  const handleIsLogin = (token) => {
+    setLogin(token);
+  };
 
   const logout = () => {
-    setLogin(null)
-  }
+    setLogin(null);
+  };
+
+  const isLoggedIn = useMemo(() => !!accessToken, [accessToken]);
 
   const context = {
     isLoggedIn,
     handleIsLogin,
-    logout
-  }
+    logout,
+    accessToken,
+  };
 
   return (
-    <AuthContext.Provider value={context}>
-      {children}
-    </AuthContext.Provider>
-  )
+    <AuthContext.Provider value={context}>{children}</AuthContext.Provider>
+  );
 }
 const useAuth = () => {
-  return useContext(AuthContext)
-}
+  return useContext(AuthContext);
+};
 
-export { useAuth, AuthProvider }
+export { useAuth, AuthProvider };

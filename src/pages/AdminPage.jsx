@@ -36,13 +36,13 @@ const INITIAL_META_DATA = {
 };
 
 export default function AdminPage() {
-  const { isLoggedIn } = useAuth();
+  const { accessToken } = useAuth();
   const [metaData, setMetaData] = useState({
     ...INITIAL_META_DATA,
   });
   const [meta, setMeta] = useState({
     ...INITIAL_META,
-    token: isLoggedIn,
+    token: accessToken,
   });
   const [showModal, setShowModal] = useState(false);
   const [showModalConfirm, setShowModalConfirm] = useState(false);
@@ -181,7 +181,7 @@ export default function AdminPage() {
   const handleSubmit = async (status) => {
     try {
       await updateStatus({
-        token: isLoggedIn,
+        token: accessToken,
         body: {
           ...detail,
           status,
@@ -223,7 +223,7 @@ export default function AdminPage() {
     try {
       await deleteRegistrations({
         id: item.id,
-        token: isLoggedIn,
+        token: accessToken,
       });
 
       toast.success("Registrasi berhasil dihapus!");

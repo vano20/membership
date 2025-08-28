@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Modal from '/src/components/Modal'
+import Modal from '@/components/Modal'
 import { Button } from './Base/Button'
 
 export default function ModalSuccess({ showModal, title = '', desc = '', submitText = 'Confirm', cancelText = 'Close', handleChange, onSubmit }) {

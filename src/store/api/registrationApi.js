@@ -15,7 +15,7 @@ const baseQueryHandler = async (
 ) => {
   const result = await baseQuery(args, api, opts)
   if (result?.error?.status === 401) {
-    localStorage.setItem('isLoggedIn', null)
+    localStorage.setItem('accessToken', null)
     window.location.replace('/')
   }
   return result

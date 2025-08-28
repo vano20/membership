@@ -1,6 +1,7 @@
-export type InputProps = {
+export interface InputProps {
   label?: string
   name: string
   type?: string
+  placeholder?: string
   isInvalid?: boolean
 }

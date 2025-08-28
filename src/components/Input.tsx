@@ -1,12 +1,13 @@
 import { ErrorMessage, Field } from "formik";
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { InputProps } from "src/types/input";
+import { InputProps } from "@/types/input";
 
 function Input({
   label,
   name,
   type = "text",
+  placeholder,
   isInvalid,
   ...props
 }: InputProps): JSX.Element {
@@ -29,6 +30,7 @@ function Input({
         <Field
           name={name}
           type={theType}
+          placeholder={placeholder}
           className={`focus:outline-none focus:ring-0 focus:border-blue-200/75 focus:shadow-md focus:shadow-blue-500/30 border border-slate-300 rounded-md py-1 px-2 w-full h-10 placeholder:text-sm ${
             isInvalid ? "border-red-600/50 shadow-md shadow-red-600/30" : ""
           } ${

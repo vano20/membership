@@ -429,8 +429,9 @@ const RegistrationsForm = () => {
                 type="submit"
                 rounded
                 isDisabled={isPageLoading || isSubmitting}
+                isLoading={isPageLoading}
               >
-                {isPageLoading ? "Loading.." : "Submit"}
+                Submit
               </Button>
             </div>
           </Form>

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import ModalSuccess from "@/components/ModalSuccess";
 import { useParams } from "react-router-dom";
 import { capitalize } from "@/helper/string";
-import { registrationSchema } from "@/validation/registration";
+import { registrationSchema } from "@/validation/registration.ts";
 import {
   useAddRegistrationsMutation,
   useUpdateRegistrationsMutation,

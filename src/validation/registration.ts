@@ -14,14 +14,12 @@ export const registrationSchema =
     contact_person: Yup.string().required(
       'Masukkan nama PJ'
     ),
-    phone_number: Yup.string(
-      'Telepon tidak valid'
-    )
+    phone_number: Yup.string()
       .required('Masukkan Telepon')
       .test(
         'len',
         'Telepon tidak valid',
-        val => val && val.toString().length <= 15 && val.toString().length >= 8
+        val => !!val && val.toString().length <= 15 && val.toString().length >= 8
       ),
     position: Yup.object().shape({
       label: Yup.string(),
@@ -33,13 +31,13 @@ export const registrationSchema =
     company_address: Yup.string().required(
       'Masukkan alamat perusahaan'
     ),
-    npwp: Yup.string('NPWP tidak valid')
+    npwp: Yup.string()
       .required('Masukkan NPWP')
       .test(
         'len',
         'NPWP tidak valid',
         val =>
-          val &&
+          !!val &&
           val.toString().length >= 15 &&
           val.toString().length <= 16
       ),

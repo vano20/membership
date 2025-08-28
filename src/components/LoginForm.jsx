@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/useAuth";
 import toast from "react-hot-toast";
 import { Button } from "@/components/Base/Button";
-import { loginSchema } from "@/validation/login";
+import { loginSchema } from "@/validation/login.ts";
 
 export default function LoginForm() {
   const { handleIsLogin } = useAuth();
